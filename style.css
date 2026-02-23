@@ -243,14 +243,57 @@ button {
     opacity: 0.4;
 }
 
-/* Features Section */
-.features-section {
-    padding: 0 20px;
+/* Hero Features Badges */
+.hero-features {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 35px;
+    width: 100%;
 }
 
-.feature-card:hover {
-    transform: translateY(-10px) !important;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1) !important;
+.hero-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: var(--transition);
+    cursor: default;
+}
+
+.hero-badge i {
+    font-size: 1.2rem;
+    color: var(--primary);
+}
+
+.hero-badge.highlight-green i {
+    color: #2ecc71;
+}
+
+.hero-badge.highlight-yellow {
+    border-color: rgba(236, 204, 104, 0.4);
+}
+
+.hero-badge.highlight-yellow i {
+    color: #eccc68;
+}
+
+.hero-badge:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
 /* ---------------- Main Content ---------------- */
@@ -943,8 +986,11 @@ footer {
 .input-group input,
 .input-group textarea {
     width: 100%;
+    /* Padding for icon (RTL): Top Right Bottom Left */
     padding: 12px 15px 12px 40px;
-    /* Padding for icon */
+    padding-right: 40px;
+    /* Space for the right-aligned icon */
+    padding-left: 15px;
     border: 1px solid #ddd;
     border-radius: 8px;
     font-family: inherit;

@@ -340,11 +340,21 @@ registerForm.addEventListener('submit', async (e) => {
 
     if (error) {
         msgEl.classList.add('error');
-        msgEl.textContent = 'خطأ: ' + error.message;
+        // Handle specific Supabase error messages
+        let errorMsg = error.message;
+        if (errorMsg === "User already registered") errorMsg = "هذا البريد الإلكتروني مسجل بالفعل!";
+        if (errorMsg.includes("Password should be at least")) errorMsg = "كلمة المرور يجب أن تكون 6 أحرف على الأقل.";
+        msgEl.textContent = 'خطأ: ' + errorMsg;
     } else {
         msgEl.classList.add('success');
-        msgEl.textContent = 'تم إنشاء الحساب بنجاح! يتم الآن تسجيل دخولك...';
-        setTimeout(() => closeAuthModal(), 1500);
+        if (data?.session) {
+            msgEl.textContent = 'تم إنشاء الحساب وتسجيل الدخول بنجاح!';
+        } else {
+            msgEl.textContent = 'تم إنشاء الحساب! (قد يرسل لك Supabase رسالة لتبني الإيميل للمصادقة)';
+            // Fallback: If auto-login doesn't happen, force a sign in
+            await supabaseClient.auth.signInWithPassword({ email, password });
+        }
+        setTimeout(() => closeAuthModal(), 2000);
     }
 });
 
