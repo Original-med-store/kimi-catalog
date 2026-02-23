@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر كيمي الطبي - Kimi Medical Catalog</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css?v=3">
+</head>
+
+<body>
+
+    <!-- Header & Hero Section -->
+    <header class="hero-section">
+        <div class="glass-nav">
+            <div class="logo">
+                <i class="fa-solid fa-staff-snake text-gradient"></i>
+                <span>ORIGINAL <span class="text-light">MED</span></span>
+            </div>
+            <div class="nav-links">
+                <a href="#" class="active">الرئيسية</a>
+                <a href="#catalog">الكتالوج</a>
+                <a href="#contact">تواصل معنا</a>
+                <button class="auth-btn" id="navAuthBtn" onclick="toggleAuthModal('login')">
+                    <i class="fa-solid fa-user"></i> حسابي
+                </button>
+            </div>
+        </div>
+
+        <div class="hero-content">
+            <h1 class="bounce-in">أفضل المستلزمات الطبية <br><span class="text-gradient">بين يديك</span></h1>
+            <p class="fade-in">تصفح أحدث المنتجات والمعدات الطبية بكل سهولة، بتحديث مباشر للأسعار والكميات.</p>
+
+            <div class="search-box slide-up">
+                <i class="fa-solid fa-search"></i>
+                <input type="text" id="searchInput" placeholder="ابحث عن صنف، أجهزة طبية، مستلزمات طبية...">
+                <button id="searchBtn">بحث</button>
+            </div>
+        </div>
+
+        <!-- Animated Background Shapes -->
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </header>
+
+    <!-- Features Section -->
+    <section class="features-section container" style="margin-top: 20px; position: relative; z-index: 10;">
+        <div class="features-grid"
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; text-align: center;">
+            <div class="feature-card"
+                style="background: white; padding: 15px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: transform 0.3s;">
+                <i class="fa-solid fa-stethoscope"
+                    style="font-size: 2rem; color: var(--primary); margin-bottom: 10px;"></i>
+                <h3 style="color: var(--dark); margin-bottom: 8px; font-size: 1.05rem;">تجهيز شامل ومتكامل</h3>
+                <p style="color: #666; font-size: 0.85rem; line-height: 1.5;">نوفر لك أفضل مستلزمات الطب والأجهزة
+                    الطبية، الخيوط الجراحية، والقساطر بأعلى جودة لضمان رعاية صحية ممتازة.</p>
+            </div>
+
+            <div class="feature-card"
+                style="background: white; padding: 15px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: transform 0.3s;">
+                <i class="fa-solid fa-hospital" style="font-size: 2rem; color: #27ae60; margin-bottom: 10px;"></i>
+                <h3 style="color: var(--dark); margin-bottom: 8px; font-size: 1.05rem;">تجهيز العيادات والمستشفيات</h3>
+                <p style="color: #666; font-size: 0.85rem; line-height: 1.5;">خبراء في فرش وتجهيز العيادات الطبية،
+                    المستشفيات، والصيدليات بأحدث المعدات والأجهزة الدقيقة والمعتمدة.</p>
+            </div>
+
+            <div class="feature-card"
+                style="background: white; padding: 15px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: transform 0.3s; border: 2px solid #eccc68;">
+                <i class="fa-solid fa-truck-fast" style="font-size: 2rem; color: #eccc68; margin-bottom: 10px;"></i>
+                <h3 style="color: var(--dark); margin-bottom: 8px; font-size: 1.05rem;">توصيل مجاني 🚚</h3>
+                <p style="color: #666; font-size: 0.85rem; line-height: 1.5;">نسعد بخدمتكم وتوفير الجهد عليكم. استمتع
+                    بتوصيل مجاني لطلبات <strong style="color:var(--dark);">> 1000 ج.م</strong>.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Catalog Section -->
+    <main id="catalog" class="container" style="padding-top: 20px;">
+
+        <!-- Category Filters -->
+        <section class="filters-section">
+            <h2 class="section-title">التصنيفات</h2>
+            <div class="filters-container" id="categoriesContainer">
+                <button class="filter-btn active" data-id="all">الكل</button>
+                <!-- Categories will be injected here via JS -->
+            </div>
+        </section>
+
+        <!-- Loading Spinner -->
+        <div id="loadingSpinner" class="spinner-container">
+            <div class="spinner"></div>
+            <p>جاري تحميل الكتالوج...</p>
+        </div>
+
+        <!-- Items Grid -->
+        <section class="items-grid" id="itemsGrid">
+            <!-- Items will be injected here via JS -->
+        </section>
+
+        <!-- No Results Message -->
+        <div id="noResults" class="no-results hidden">
+            <i class="fa-solid fa-box-open"></i>
+            <h3>عذراً، لا توجد أصناف تطابق بحثك.</h3>
+        </div>
+
+    </main>
+
+    <!-- Floating Contact Buttons -->
+    <div class="floating-contact">
+        <a href="https://wa.me/201501882143" target="_blank" class="contact-btn whatsapp" title="تواصل عبر واتساب">
+            <i class="fa-brands fa-whatsapp"></i>
+        </a>
+        <a href="tel:+201501882143" class="contact-btn phone" title="اتصل بنا">
+            <i class="fa-solid fa-phone"></i>
+        </a>
+        <a href="https://www.facebook.com/share/1aS9KgECnT/" target="_blank" class="contact-btn facebook"
+            title="صفحتنا على فيسبوك">
+            <i class="fa-brands fa-facebook-f"></i>
+        </a>
+    </div>
+
+    <!-- Floating Cart Button -->
+    <div class="floating-cart" id="floatingCartBtn" onclick="toggleCart()">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span class="cart-badge" id="cartBadge">0</span>
+    </div>
+
+    <!-- Image Lightbox Modal -->
+    <div id="imageModal" class="modal hidden">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="img01">
+        <div id="caption"></div>
+    </div>
+
+    <!-- Shopping Cart Sidebar -->
+    <div id="cartSidebar" class="modal hidden cart-sidebar-wrapper">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2><i class="fa-solid fa-cart-shopping"></i> سلة المشتريات</h2>
+                <span class="close-cart" onclick="toggleCart()">&times;</span>
+            </div>
+
+            <div class="cart-items" id="cartItemsContainer">
+                <!-- Cart items will be rendered here -->
+            </div>
+
+            <div class="cart-summary">
+                <div class="total-row">
+                    <span>الإجمالي:</span>
+                    <strong id="cartTotal">0.00 ج.م</strong>
+                </div>
+                <button class="checkout-btn primary-btn" onclick="proceedToCheckout()">
+                    إتمام الشراء <i class="fa-solid fa-arrow-left"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkoutModal" class="modal hidden checkout-modal-wrapper">
+        <div class="modal-content checkout-modal-content">
+            <div class="modal-header">
+                <h2 style="color:var(--dark); margin:0; font-size:1.5rem;">إتمام الطلب</h2>
+                <span class="close-modal" style="color:var(--dark);" onclick="closeCheckout()">&times;</span>
+            </div>
+            <div class="checkout-details">
+                <p class="checkout-hint">يرجى إدخال بياناتك لإرسال الطلب عبر واتساب:</p>
+                <form id="checkoutForm" class="checkout-form">
+                    <div class="input-group">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="custName" placeholder="الاسم الكريم" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-phone"></i>
+                        <input type="tel" id="custPhone" placeholder="رقم الهاتف" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <textarea id="custAddress" placeholder="عنوان التوصيل (اختياري)" rows="2"></textarea>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-money-bill-wave"></i>
+                        <select id="paymentMethod"
+                            style="width: 100%; padding: 12px 15px 12px 40px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; font-size: 0.95rem; direction: rtl; background: #f9f9f9; cursor:pointer;"
+                            required>
+                            <option value="الدفع عند الاستلام (كاش)">الدفع عند الاستلام (كاش)</option>
+                            <option value="فودافون كاش">فودافون كاش</option>
+                            <option value="إنستا باي (InstaPay)">إنستا باي (InstaPay)</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="checkout-btn whatsapp-btn" style="margin-top: 15px;">
+                        <i class="fa-brands fa-whatsapp"></i> تأكيد الطلب عبر واتساب
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Modal (Login / Register) -->
+    <div id="authModal" class="modal hidden">
+        <div class="modal-content auth-modal-content">
+            <span class="close-modal" onclick="closeAuthModal()">&times;</span>
+
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">تسجيل الدخول</button>
+                <button class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">حساب جديد</button>
+            </div>
+
+            <div class="auth-form-container">
+                <!-- Login Form -->
+                <form id="loginForm" class="auth-form">
+                    <div class="input-group">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="loginEmail" placeholder="البريد الإلكتروني" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="loginPassword" placeholder="كلمة المرور" required>
+                    </div>
+                    <button type="submit" class="primary-btn checkout-btn" id="loginBtn">دخول <i
+                            class="fa-solid fa-right-to-bracket"></i></button>
+                    <p class="auth-msg" id="loginMsg"></p>
+                </form>
+
+                <!-- Register Form -->
+                <form id="registerForm" class="auth-form hidden">
+                    <div class="input-group">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="regName" placeholder="الاسم الكريم" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="regEmail" placeholder="البريد الإلكتروني" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-phone"></i>
+                        <input type="tel" id="regPhone" placeholder="رقم الهاتف" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="regPassword" placeholder="كلمة المرور (6 أحرف أو أكثر)" required
+                            minlength="6">
+                    </div>
+                    <button type="submit" class="primary-btn checkout-btn" id="registerBtn">تسجيل <i
+                            class="fa-solid fa-user-plus"></i></button>
+                    <p class="auth-msg" id="regMsg"></p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Confirm Modal -->
+    <div id="confirmModal" class="modal hidden" style="z-index: 3000;">
+        <div class="modal-content" style="max-width: 400px; text-align: center; padding: 30px;">
+            <i class="fa-solid fa-triangle-exclamation"
+                style="font-size: 3rem; color: #e74c3c; margin-bottom: 15px;"></i>
+            <h3 style="color: var(--dark); margin-bottom: 15px; font-size: 1.4rem;">تأكيد تفريغ السلة</h3>
+            <p style="color: #7f8c8d; margin-bottom: 25px; line-height: 1.5;">هل أنت متأكد من أنك تريد مسح جميع المنتجات
+                من السلة؟ لا يمكن التراجع عن هذه الخطوة.</p>
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button onclick="executeEmptyCart()" class="checkout-btn"
+                    style="background: #e74c3c; width: auto; padding: 10px 25px; border-radius: 25px;">نعم، أفرغ
+                    السلة</button>
+                <button onclick="closeConfirmModal()" class="checkout-btn"
+                    style="background: #95a5a6; width: auto; padding: 10px 25px; border-radius: 25px;">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>جميع الحقوق محفوظة &copy; 2026 - Kimi Medical POS</p>
+    </footer>
+
+    <!-- Custom JS -->
+    <script src="app.js?v=3"></script>
+</body>
+
+</html>
