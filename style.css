@@ -1265,6 +1265,11 @@ footer {
     color: white;
 }
 
+/* Hide Mobile Sub Header on Desktop */
+.mobile-sub-header {
+    display: none;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
 
@@ -1355,10 +1360,40 @@ footer {
         display: none;
     }
 
-    /* Adjust Hero Content to unhide under sticky nav */
+    /* Adjust Hero Content to unhide under sticky nav and sub-header */
     .hero-content {
-        margin-top: 60px;
-        /* تعويض مساحة الشريط العلوي */
+        margin-top: 100px;
+        /* تعويض مساحة الشريط العلوي واللوجو */
+    }
+
+    /* Mobile Sub Header (Logo Bar) */
+    .mobile-sub-header {
+        display: flex;
+        align-items: center;
+        background: #37475a;
+        /* Amazon lighter secondary header */
+        padding: 5px 15px;
+        position: fixed;
+        top: 50px;
+        /* Right below the 50px search bar (40px + 10px padding) */
+        left: 0;
+        width: 100%;
+        height: 40px;
+        z-index: 1999;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .mobile-sub-header .logo {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 900;
+        font-size: 1rem;
+        color: white;
+    }
+
+    .mobile-sub-header .logo i {
+        font-size: 1.2rem;
     }
 
     /* Bottom Navigation Bar */
@@ -1383,13 +1418,17 @@ footer {
         align-items: center;
         text-decoration: none;
         color: #7f8c8d;
-        font-size: 0.75rem;
-        gap: 5px;
+        font-size: 0.65rem;
+        /* أصغر قليلاً لاستيعاب 5 أزرار */
+        gap: 4px;
         transition: color 0.3s;
+        flex: 1;
+        /* توزيع المساحة بالتساوي */
     }
 
     .nav-item i {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
+        /* تصغير الأيقونة قليلاً */
     }
 
     .nav-item.active,
