@@ -94,6 +94,8 @@ button {
     display: flex;
     align-items: center;
     gap: 10px;
+    white-space: nowrap;
+    /* منع اللوجو من الانقسام لسطرين في الديسكتوب */
 }
 
 .nav-links a {
@@ -1386,14 +1388,20 @@ footer {
     .mobile-sub-header .logo {
         display: flex;
         align-items: center;
-        gap: 8px;
+        justify-content: center;
+        /* توسيط اللوجو */
+        width: 100%;
+        /* أخذ العرض كاملاً للمساعدة في التوسيط */
+        gap: 10px;
         font-weight: 900;
-        font-size: 1rem;
+        font-size: 1.2rem;
+        /* تكبير الخط */
         color: white;
     }
 
     .mobile-sub-header .logo i {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
+        /* تكبير الأيقونة */
     }
 
     /* Bottom Navigation Bar */
