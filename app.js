@@ -141,7 +141,7 @@ function renderItems(itemsToRender) {
                     <img src="${imgUrl}" alt="${item.name}" class="card-img" onerror="this.src='${FALLBACK_IMG}'">
                 </div>
                 <div class="card-body">
-                    <span class="card-category">${item.category_name}</span>
+                    <a href="#" class="card-category" onclick="filterByCategory('${item.category_id}'); return false;" title="عرض كل السلع في ${item.category_name}">${item.category_name}</a>
                     <h3 class="card-title">${item.name}</h3>
                     <div class="card-stock">
                         ${stockStatus}
@@ -195,6 +195,40 @@ function filterAndSearch() {
     }
 
     renderItems(filtered);
+}
+
+// Function to trigger category filter programmatically (e.g., from item cards)
+function filterByCategory(categoryId) {
+    if (!categoryId || categoryId === 'undefined' || categoryId === 'null') return;
+
+    // Update State
+    currentCategoryId = categoryId;
+
+    // Update UI Buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        if (btn.getAttribute('data-id') == categoryId) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+
+    // Clear search if any to see full category
+    searchInput.value = '';
+
+    // Filter & render
+    filterAndSearch();
+
+    // Auto-scroll to catalog
+    const catalogSec = document.getElementById('catalog');
+    if (catalogSec) {
+        const headerOffset = window.innerWidth <= 768 ? 130 : 80;
+        const offsetPosition = catalogSec.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+        });
+    }
 }
 
 function setupEventListeners() {

@@ -441,8 +441,21 @@ main {
 .card-category {
     font-size: 0.8rem;
     color: var(--secondary);
+    background: rgba(58, 123, 213, 0.1);
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 8px;
     font-weight: 600;
-    margin-bottom: 3px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.card-category:hover {
+    background: var(--secondary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(58, 123, 213, 0.3);
 }
 
 .card-title {
