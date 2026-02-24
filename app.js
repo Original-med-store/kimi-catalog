@@ -249,6 +249,8 @@ window.onclick = function (event) {
         history.back();
     } else if (event.target == authModal) {
         closeAuthModal();
+    } else if (event.target == document.getElementById('contactSheet')) {
+        toggleContactSheet();
     }
 }
 
@@ -284,10 +286,28 @@ function switchAuthTab(tabName) {
     }
 }
 
+// ==== Contact Bottom Sheet Functionality ====
+const contactSheet = document.getElementById('contactSheet');
+
+function toggleContactSheet() {
+    if (!contactSheet) return;
+    if (contactSheet.classList.contains('show')) {
+        contactSheet.classList.remove('show');
+        setTimeout(() => contactSheet.classList.add('hidden'), 300);
+    } else {
+        contactSheet.classList.remove('hidden');
+        // Delay to allow display to apply
+        setTimeout(() => contactSheet.classList.add('show'), 10);
+    }
+}
+
 // Handle phone hardware back button
 window.addEventListener('popstate', function (event) {
     if (isLightboxOpen) {
         closeLightbox();
+    }
+    if (contactSheet && contactSheet.classList.contains('show')) {
+        toggleContactSheet();
     }
 });
 

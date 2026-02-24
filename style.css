@@ -1190,16 +1190,35 @@ footer {
 
     .glass-nav {
         flex-direction: column;
-        gap: 15px;
-        border-radius: 15px;
+        gap: 10px;
+        border-radius: 0 0 15px 15px;
         padding: 10px;
-        margin-top: 10px;
+        margin-top: 0;
+        background: var(--primary);
+        /* Amazon style solid/gradient header */
+    }
+
+    .glass-nav .logo span,
+    .glass-nav .logo i {
+        color: white;
+    }
+
+    .glass-nav .nav-links {
+        display: none;
+        /* إخفاء الروابط العلوية في الموبايل واستبدالها بالسفلية */
+    }
+
+    .desktop-only-text,
+    .desktop-icon {
+        display: none;
     }
 
     .search-box {
         flex-direction: row;
-        border-radius: 20px;
-        padding: 5px;
+        border-radius: 8px;
+        padding: 0;
+        background: white;
+        width: 100%;
     }
 
     .search-box input {
@@ -1288,17 +1307,86 @@ footer {
     /* Clean up floating elements on mobile */
     .floating-cart {
         display: none;
-        /* نعوضها بالبار السفلي */
     }
 
     .floating-contact {
         display: none;
-        /* توفير مساحة الشاشة، يمكن تخصيص أيقونة واحدة */
     }
 
     main {
         padding-bottom: 80px;
-        /* مسافة للبار السفلي */
+        padding-top: 10px;
+    }
+
+    /* Contact Bottom Sheet Mobile Styling */
+    .contact-sheet-content {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: white;
+        border-radius: 20px 20px 0 0;
+        padding: 20px;
+        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+        transform: translateY(100%);
+        transition: transform 0.3s ease-out;
+    }
+
+    #contactSheet.show .contact-sheet-content {
+        transform: translateY(0);
+    }
+
+    .sheet-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+    }
+
+    .sheet-header h3 {
+        margin: 0;
+        color: var(--dark);
+    }
+
+    .close-sheet {
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #999;
+    }
+
+    .sheet-options {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .sheet-option {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1.1rem;
+        transition: background 0.3s;
+    }
+
+    .sheet-option.wapp {
+        background: #e8f5e9;
+        color: #2ecc71;
+    }
+
+    .sheet-option.phone {
+        background: #e3f2fd;
+        color: #3498db;
+    }
+
+    .sheet-option.fb {
+        background: #e8eaf6;
+        color: #3f51b5;
     }
 
     /* تصغير الكروت على الموبايل */
