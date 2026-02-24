@@ -1278,78 +1278,87 @@ footer {
         font-size: 2.2rem;
     }
 
+    /* Amazon style sticky search header */
     .glass-nav {
-        flex-direction: column;
-        gap: 15px;
-        border-radius: 20px;
-        padding: 15px;
-        margin-top: 55px;
-        /* مساحة لشريط البحث الثابت */
-        background: transparent;
-        /* إرجاع الشفافية */
-    }
-
-    .glass-nav .logo span,
-    .glass-nav .logo i {
-        color: inherit;
-    }
-
-    .glass-nav .nav-links {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        margin: 0;
+        padding: 5px 10px;
+        background: #232f3e;
+        /* Amazon dark header color */
+        z-index: 2000;
+        border-radius: 0;
         display: flex;
-        /* إظهار الروابط مرة أخرى */
-        flex-wrap: wrap;
-        justify-content: center;
+        flex-direction: row;
+        align-items: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
 
+    .glass-nav .logo,
+    .glass-nav .nav-links,
     .desktop-only-text,
     .desktop-icon {
         display: none;
+        /* إخفاء اللوجو والروابط في الموبايل */
     }
 
     /* Fixed Top Search Bar - Amazon Style */
     .search-box {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 2000;
         flex-direction: row;
-        border-radius: 0;
-        padding: 5px 10px;
         background: #fff;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        /* حواف مربعة قليلاً مثل أمازون */
+        padding: 0;
         width: 100%;
-        height: 50px;
+        height: 40px;
+        /* سمك أقل */
+        display: flex;
+        align-items: center;
+        overflow: hidden;
     }
 
     .search-box input {
         margin: 0;
-        padding: 5px 10px;
+        padding: 0 10px;
         width: 100%;
+        height: 100%;
+        border: none;
+        outline: none;
         text-align: right;
-        font-size: 1rem;
-        background: #f1f3f6;
-        border-radius: 5px;
+        font-size: 0.95rem;
+        background: #fff;
         color: #333;
     }
 
     .search-box button {
         width: 45px;
-        height: 45px;
+        height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
         padding: 0;
+        background: #febd69;
+        /* لون زر أمازون البرتقالي */
+        color: #111;
+        border-radius: 0;
+        /* شكل مربع للزر */
     }
 
     .search-box button i {
         display: block;
-        /* إظهار الأيقونة بدلا من النص */
+        font-size: 1.1rem;
     }
 
     .search-box button span {
         display: none;
-        /* إخفاء كلمة "بحث" للصغر */
+    }
+
+    /* Adjust Hero Content to unhide under sticky nav */
+    .hero-content {
+        margin-top: 60px;
+        /* تعويض مساحة الشريط العلوي */
     }
 
     /* Bottom Navigation Bar */
