@@ -219,15 +219,37 @@ function showLoading(show) {
 }
 
 // ==== Image Lightbox Functionality ====
+let isLightboxOpen = false;
+
 function openLightbox(imgSrc, caption) {
     if (imgSrc.includes('placeholder')) return; // Don't zoom fallback images
     modal.classList.add("show");
     modalImg.src = imgSrc;
     captionText.innerHTML = caption;
+    isLightboxOpen = true;
+    history.pushState({ lightbox: true }, "");
+}
+
+function closeLightbox() {
+    if (isLightboxOpen) {
+        modal.classList.remove("show");
+        isLightboxOpen = false;
+    }
 }
 
 closeModal.onclick = function () {
-    modal.classList.remove("show");
+    if (isLightboxOpen) {
+        history.back(); // Triggers popstate which closes the modal
+    }
+}
+
+// Close Modals when clicking outside
+window.onclick = function (event) {
+    if (event.target == modal && isLightboxOpen) {
+        history.back();
+    } else if (event.target == authModal) {
+        closeAuthModal();
+    }
 }
 
 // ==== Auth Modal Functionality ====
@@ -262,15 +284,12 @@ function switchAuthTab(tabName) {
     }
 }
 
-// Close Modals when clicking outside
-window.onclick = function (event) {
-    if (event.target == modal) {
-        modal.classList.remove("show");
+// Handle phone hardware back button
+window.addEventListener('popstate', function (event) {
+    if (isLightboxOpen) {
+        closeLightbox();
     }
-    if (event.target == authModal) {
-        closeAuthModal();
-    }
-}
+});
 
 // ==== Supabase Auth Logic ====
 let currentUser = null;
@@ -543,7 +562,7 @@ checkoutForm.addEventListener('submit', function (e) {
     let orderDetails = cart.map(item => {
         total += (item.price * item.qty);
         return `▫️ ${item.qty}x ${item.name} (${(item.price * item.qty).toFixed(2)} ج.م)`;
-    }).join('\\n');
+    }).join('\n');
 
     const message = `
 🌟 *طلب وتوصيل جديد* 🌟

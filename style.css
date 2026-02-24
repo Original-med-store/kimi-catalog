@@ -389,6 +389,8 @@ main {
     object-fit: contain;
     /* Better for medical items */
     transition: transform 0.5s ease;
+    color: transparent;
+    /* يمنع ظهور اسم الصورة (البربشة) أثناء التحميل بطريقة غير جمالية */
 }
 
 .item-card:hover .card-img {
@@ -1172,5 +1174,41 @@ footer {
 
     .search-box i {
         display: none;
+    }
+
+    /* تصغير الكروت على الموبايل */
+    .items-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 10px;
+    }
+
+    .card-img-container {
+        height: 110px;
+        /* صورة أصغر */
+    }
+
+    .card-body {
+        padding: 8px;
+        /* تقليل الهوامش الداخلية */
+    }
+
+    .card-title {
+        font-size: 0.9rem;
+        /* خط أصغر لاسم الدواء */
+        margin-bottom: 5px;
+    }
+
+    .card-category {
+        font-size: 0.7rem;
+    }
+
+    .price {
+        font-size: 1rem;
+    }
+
+    .add-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 0.85rem;
     }
 }
