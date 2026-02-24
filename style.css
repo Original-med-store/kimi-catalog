@@ -296,6 +296,38 @@ button {
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
+/* ========================================= */
+/* Toast Notification & Bottom Nav           */
+/* ========================================= */
+
+.toast {
+    position: fixed;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #27ae60;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    opacity: 0;
+}
+
+.toast.show {
+    bottom: 80px;
+    /* Above bottom nav */
+    opacity: 1;
+}
+
+.bottom-nav {
+    display: none;
+    /* مخفي في الديسكتوب */
+}
+
 /* ---------------- Main Content ---------------- */
 main {
     padding: 60px 20px;
@@ -1143,37 +1175,130 @@ footer {
 
 /* Responsive */
 @media (max-width: 768px) {
+
+    /* Sticky Header on Mobile */
+    header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
     .hero-content h1 {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
     }
 
     .glass-nav {
         flex-direction: column;
         gap: 15px;
-        border-radius: 20px;
-        padding: 15px;
+        border-radius: 15px;
+        padding: 10px;
+        margin-top: 10px;
     }
 
     .search-box {
-        flex-direction: column;
+        flex-direction: row;
         border-radius: 20px;
-        padding: 10px;
-        background: rgba(255, 255, 255, 0.2);
+        padding: 5px;
     }
 
     .search-box input {
-        margin: 10px 0;
-        padding-right: 15px;
+        margin: 0;
+        padding: 5px 10px;
         width: 100%;
-        text-align: center;
+        text-align: right;
     }
 
     .search-box button {
-        width: 100%;
+        width: 45px;
+        height: 45px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
     }
 
-    .search-box i {
+    .search-box button i {
+        display: block;
+        /* إظهار الأيقونة بدلا من النص */
+    }
+
+    .search-box button span {
         display: none;
+        /* إخفاء كلمة "بحث" للصغر */
+    }
+
+    /* Bottom Navigation Bar */
+    .bottom-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+        justify-content: space-around;
+        padding: 10px 0 15px;
+        z-index: 2000;
+        border-top: 1px solid #eee;
+    }
+
+    .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: #7f8c8d;
+        font-size: 0.75rem;
+        gap: 5px;
+        transition: color 0.3s;
+    }
+
+    .nav-item i {
+        font-size: 1.3rem;
+    }
+
+    .nav-item.active,
+    .nav-item:hover {
+        color: var(--primary);
+    }
+
+    .nav-icon-wrapper {
+        position: relative;
+    }
+
+    .nav-badge {
+        position: absolute;
+        top: -5px;
+        right: -10px;
+        background: #e74c3c;
+        color: white;
+        font-size: 0.65rem;
+        font-weight: bold;
+        min-width: 18px;
+        height: 18px;
+        border-radius: 9px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 2px solid white;
+    }
+
+    /* Clean up floating elements on mobile */
+    .floating-cart {
+        display: none;
+        /* نعوضها بالبار السفلي */
+    }
+
+    .floating-contact {
+        display: none;
+        /* توفير مساحة الشاشة، يمكن تخصيص أيقونة واحدة */
+    }
+
+    main {
+        padding-bottom: 80px;
+        /* مسافة للبار السفلي */
     }
 
     /* تصغير الكروت على الموبايل */

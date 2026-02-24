@@ -262,13 +262,39 @@
         </div>
     </div>
 
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden">تمت الإضافة للسلة بنجاح!</div>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active" onclick="window.scrollTo(0,0); return false;">
+            <i class="fa-solid fa-house"></i>
+            <span>الرئيسية</span>
+        </a>
+        <a href="#" class="nav-item" onclick="document.querySelector('.search-box input').focus(); return false;">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <span>البحث</span>
+        </a>
+        <a href="#" class="nav-item" onclick="toggleCart(); return false;">
+            <div class="nav-icon-wrapper">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span class="nav-badge" id="navCartBadge">0</span>
+            </div>
+            <span>السلة</span>
+        </a>
+        <a href="#" class="nav-item" onclick="toggleAuthModal('login'); return false;" id="bottomNavAuth">
+            <i class="fa-solid fa-user"></i>
+            <span>حسابي</span>
+        </a>
+    </nav>
+
     <!-- Footer -->
     <footer>
         <p>جميع الحقوق محفوظة &copy; 2026 - Original-Med-Store</p>
     </footer>
 
     <!-- Custom JS -->
-    <script src="app.js?v=3"></script>
+    <script src="app.js?v=4"></script>
 </body>
 
 </html>

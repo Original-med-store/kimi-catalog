@@ -422,10 +422,20 @@ function addToCart(id, name, price, imgUrl) {
     }
     updateCart();
 
-    // Quick visual feedback
+    // Quick visual feedback on Desktop
     const btn = document.getElementById('floatingCartBtn');
-    btn.style.transform = 'scale(1.2)';
-    setTimeout(() => btn.style.transform = '', 200);
+    if (btn) {
+        btn.style.transform = 'scale(1.2)';
+        setTimeout(() => btn.style.transform = '', 200);
+    }
+
+    // Show Toast Notification for Mobile/Desktop
+    const toast = document.getElementById('toast');
+    if (toast) {
+        toast.textContent = `تم إضافة "${name}" للسلة بنجاح`;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
+    }
 }
 
 function updateQuantity(id, delta) {
@@ -470,6 +480,17 @@ function updateCart() {
     // Update Badge
     const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
     cartBadge.textContent = totalItems;
+
+    // Update mobile bottom nav badge
+    const navBadge = document.getElementById('navCartBadge');
+    if (navBadge) {
+        navBadge.textContent = totalItems;
+        if (totalItems > 0) {
+            navBadge.style.display = 'flex';
+        } else {
+            navBadge.style.display = 'none';
+        }
+    }
 
     // Render Items
     if (cart.length === 0) {
