@@ -218,40 +218,80 @@ function showLoading(show) {
     }
 }
 
+// ==== Global Modal Flow Manager ====
+function closeTopMostModal() {
+    let closedAny = false;
+    if (isLightboxOpen) {
+        modal.classList.remove("show");
+        isLightboxOpen = false;
+        closedAny = true;
+    } else if (document.getElementById('confirmModal') && document.getElementById('confirmModal').classList.contains('show')) {
+        const cfmModal = document.getElementById('confirmModal');
+        cfmModal.classList.remove('show');
+        setTimeout(() => cfmModal.classList.add('hidden'), 300);
+        closedAny = true;
+    } else if (checkoutModal && checkoutModal.classList.contains('show')) {
+        checkoutModal.classList.remove('show');
+        setTimeout(() => checkoutModal.classList.add('hidden'), 300);
+        closedAny = true;
+    } else if (authModal && authModal.classList.contains('show')) {
+        authModal.classList.remove('show');
+        setTimeout(() => authModal.classList.add('hidden'), 300);
+        closedAny = true;
+    } else if (contactSheet && contactSheet.classList.contains('show')) {
+        contactSheet.classList.remove('show');
+        setTimeout(() => contactSheet.classList.add('hidden'), 300);
+        closedAny = true;
+    } else if (cartSidebar && cartSidebar.classList.contains('show-sidebar')) {
+        cartSidebar.classList.remove('show-sidebar');
+        setTimeout(() => cartSidebar.classList.add('hidden'), 400);
+        closedAny = true;
+    }
+    return closedAny;
+}
+
+window.addEventListener('popstate', function () {
+    closeTopMostModal();
+});
+
+window.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+        const isOpen = isLightboxOpen ||
+            (authModal && authModal.classList.contains('show')) ||
+            (cartSidebar && cartSidebar.classList.contains('show-sidebar')) ||
+            (checkoutModal && checkoutModal.classList.contains('show')) ||
+            (contactSheet && contactSheet.classList.contains('show')) ||
+            (document.getElementById('confirmModal') && document.getElementById('confirmModal').classList.contains('show'));
+        if (isOpen) history.back();
+    }
+});
+
+window.addEventListener('click', function (event) {
+    if (event.target == modal && isLightboxOpen) history.back();
+    else if (event.target == authModal && authModal.classList.contains('show')) history.back();
+    else if (event.target == contactSheet && contactSheet.classList.contains('show')) history.back();
+    else if (event.target == checkoutModal && checkoutModal.classList.contains('show')) history.back();
+});
+
 // ==== Image Lightbox Functionality ====
 let isLightboxOpen = false;
 
 function openLightbox(imgSrc, caption) {
     if (imgSrc.includes('placeholder')) return; // Don't zoom fallback images
+    modal.classList.remove('hidden');
     modal.classList.add("show");
     modalImg.src = imgSrc;
     captionText.innerHTML = caption;
     isLightboxOpen = true;
-    history.pushState({ lightbox: true }, "");
+    history.pushState({ modal: true }, "");
 }
 
 function closeLightbox() {
-    if (isLightboxOpen) {
-        modal.classList.remove("show");
-        isLightboxOpen = false;
-    }
+    if (isLightboxOpen) history.back();
 }
 
 closeModal.onclick = function () {
-    if (isLightboxOpen) {
-        history.back(); // Triggers popstate which closes the modal
-    }
-}
-
-// Close Modals when clicking outside
-window.onclick = function (event) {
-    if (event.target == modal && isLightboxOpen) {
-        history.back();
-    } else if (event.target == authModal) {
-        closeAuthModal();
-    } else if (event.target == document.getElementById('contactSheet')) {
-        toggleContactSheet();
-    }
+    if (isLightboxOpen) history.back();
 }
 
 // ==== Auth Modal Functionality ====
@@ -262,14 +302,16 @@ const tabLogin = document.getElementById('tabLogin');
 const tabRegister = document.getElementById('tabRegister');
 
 function toggleAuthModal(initialTab = 'login') {
-    authModal.classList.remove('hidden');
-    authModal.classList.add('show');
-    switchAuthTab(initialTab);
+    if (!authModal.classList.contains('show')) {
+        authModal.classList.remove('hidden');
+        authModal.classList.add('show');
+        switchAuthTab(initialTab);
+        history.pushState({ modal: true }, "");
+    }
 }
 
 function closeAuthModal() {
-    authModal.classList.remove('show');
-    setTimeout(() => authModal.classList.add('hidden'), 300);
+    if (authModal.classList.contains('show')) history.back();
 }
 
 function switchAuthTab(tabName) {
@@ -292,24 +334,13 @@ const contactSheet = document.getElementById('contactSheet');
 function toggleContactSheet() {
     if (!contactSheet) return;
     if (contactSheet.classList.contains('show')) {
-        contactSheet.classList.remove('show');
-        setTimeout(() => contactSheet.classList.add('hidden'), 300);
+        history.back();
     } else {
         contactSheet.classList.remove('hidden');
-        // Delay to allow display to apply
         setTimeout(() => contactSheet.classList.add('show'), 10);
+        history.pushState({ modal: true }, "");
     }
 }
-
-// Handle phone hardware back button
-window.addEventListener('popstate', function (event) {
-    if (isLightboxOpen) {
-        closeLightbox();
-    }
-    if (contactSheet && contactSheet.classList.contains('show')) {
-        toggleContactSheet();
-    }
-});
 
 // ==== Supabase Auth Logic ====
 let currentUser = null;
@@ -424,12 +455,12 @@ loginForm.addEventListener('submit', async (e) => {
 
 // ==== Shopping Cart Functionality ====
 function toggleCart() {
-    cartSidebar.classList.remove('hidden'); // Ensure base visibility
-    cartSidebar.classList.toggle("show-sidebar");
-
-    // Optional: Hide completely when closed to prevent invisible blocking
-    if (!cartSidebar.classList.contains("show-sidebar")) {
-        setTimeout(() => cartSidebar.classList.add('hidden'), 400); // 400ms matches CSS transition
+    if (cartSidebar.classList.contains("show-sidebar")) {
+        history.back();
+    } else {
+        cartSidebar.classList.remove('hidden');
+        setTimeout(() => cartSidebar.classList.add("show-sidebar"), 10);
+        history.pushState({ modal: true }, "");
     }
 }
 
@@ -476,17 +507,17 @@ function removeCartItem(id) {
 
 function emptyCart() {
     const cfmModal = document.getElementById('confirmModal');
-    if (cfmModal) {
+    if (cfmModal && !cfmModal.classList.contains('show')) {
         cfmModal.classList.remove('hidden');
         cfmModal.classList.add('show');
+        history.pushState({ modal: true }, "");
     }
 }
 
 function closeConfirmModal() {
     const cfmModal = document.getElementById('confirmModal');
-    if (cfmModal) {
-        cfmModal.classList.remove('show');
-        setTimeout(() => cfmModal.classList.add('hidden'), 300);
+    if (cfmModal && cfmModal.classList.contains('show')) {
+        history.back();
     }
 }
 
@@ -565,26 +596,24 @@ function proceedToCheckout() {
         alert("السلة فارغة. يرجى إضافة منتجات أولاً.");
         return;
     }
-    // Close Sidebar
-    toggleCart();
+    // Close Sidebar securely
+    if (cartSidebar.classList.contains('show-sidebar')) {
+        history.back();
+    }
     // Open Checkout Modal
     setTimeout(() => {
         checkoutModal.classList.remove('hidden');
         checkoutModal.classList.add('show');
-    }, 300); // wait for sidebar to start closing
+        history.pushState({ modal: true }, "");
+    }, 150);
 }
 
 function closeCheckout() {
-    checkoutModal.classList.remove('show');
-    setTimeout(() => checkoutModal.classList.add('hidden'), 300);
+    if (checkoutModal.classList.contains('show')) {
+        history.back();
+    }
 }
 
-// Close checkout modal when clicking outside
-window.addEventListener('click', function (e) {
-    if (e.target == checkoutModal) {
-        closeCheckout();
-    }
-});
 
 // Checkout Process Form Submit
 checkoutForm.addEventListener('submit', function (e) {
