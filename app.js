@@ -141,7 +141,7 @@ function renderItems(itemsToRender) {
                     <img src="${imgUrl}" alt="${item.name}" class="card-img" onerror="this.src='${FALLBACK_IMG}'">
                 </div>
                 <div class="card-body">
-                    <a href="#" class="card-category" onclick="filterByCategory('${item.category_id}'); return false;" title="عرض كل السلع في ${item.category_name}">${item.category_name}</a>
+                    <a href="#" class="card-category" onclick="filterByCategory(event, '${item.category_id}')" title="عرض كل السلع في ${item.category_name}">${item.category_name}</a>
                     <h3 class="card-title">${item.name}</h3>
                     <div class="card-stock">
                         ${stockStatus}
@@ -198,7 +198,11 @@ function filterAndSearch() {
 }
 
 // Function to trigger category filter programmatically (e.g., from item cards)
-function filterByCategory(categoryId) {
+function filterByCategory(event, categoryId) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
     if (!categoryId || categoryId === 'undefined' || categoryId === 'null') return;
 
     // Update State
