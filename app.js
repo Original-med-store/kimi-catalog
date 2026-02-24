@@ -178,6 +178,20 @@ function filterAndSearch() {
             item.name.toLowerCase().includes(searchTerm) ||
             item.category_name.toLowerCase().includes(searchTerm)
         );
+
+        // Auto-scroll to catalog when specifically typing a search
+        const catalogSec = document.getElementById('catalog');
+        if (catalogSec) {
+            // Offset scroll to account for fixed header
+            const headerOffset = window.innerWidth <= 768 ? 100 : 80;
+            const elementPosition = catalogSec.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: "smooth"
+            });
+        }
     }
 
     renderItems(filtered);
