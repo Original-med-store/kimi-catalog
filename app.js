@@ -281,15 +281,18 @@ function setupEventListeners() {
 
     // Category clicking (Event Delegation)
     categoriesContainer.addEventListener('click', (e) => {
-        if (e.target.classList.contains('filter-btn')) {
+        const btn = e.target.closest('.filter-btn');
+        if (btn) {
             // Remove active class from all
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             // Add active to clicked
-            e.target.classList.add('active');
+            btn.classList.add('active');
 
-            // Update state and filter
-            currentCategoryId = e.target.getAttribute('data-id');
-            filterAndSearch();
+            // Find category id
+            const categoryId = btn.getAttribute('data-id');
+
+            // Re-use logic to actually trigger filter and panel logic
+            filterByCategory(null, categoryId);
         }
     });
 }

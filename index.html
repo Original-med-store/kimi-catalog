@@ -81,19 +81,21 @@
 
         <!-- Category Filters -->
         <section class="filters-section" style="margin-bottom: 30px; position: relative;">
-            <div class="category-header-wrap"
-                style="display: flex; align-items: center; justify-content: center; position: relative; min-height: 48px; margin-bottom: 15px;">
+            <div class="category-header-wrap">
                 <!-- Right-aligned Toggle Button -->
-                <button id="openCategoriesBtn" class="open-categories-btn" onclick="toggleCategoriesPanel()"
-                    style="position: absolute; right: 0; background: white; border: 1px solid rgba(0,0,0,0.1); padding: 8px 18px; border-radius: 30px; font-size: 1rem; font-weight: 700; color: var(--dark); display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: all 0.3s ease; z-index: 2;">
-                    <i class="fa-solid fa-layer-group" style="color: var(--primary);"></i>
-                    <span id="currentCategoryText">اختر القسم</span>
-                    <i class="fa-solid fa-chevron-down down-icon" style="transition: transform 0.3s ease;"></i>
-                </button>
+                <div class="header-side">
+                    <button id="openCategoriesBtn" class="open-categories-btn" onclick="toggleCategoriesPanel()">
+                        <i class="fa-solid fa-layer-group" style="color: var(--primary);"></i>
+                        <span id="currentCategoryText">اختر القسم</span>
+                        <i class="fa-solid fa-chevron-down down-icon"></i>
+                    </button>
+                </div>
 
                 <!-- Centered Title -->
-                <h2 class="section-title"
-                    style="margin: 0; text-align: center; width: 100%; position: absolute; z-index: 1;">الكتالوج</h2>
+                <h2 class="section-title header-center">الكتالوج</h2>
+
+                <!-- Left Ghost for Balance -->
+                <div class="header-side"></div>
             </div>
 
             <!-- In-page Categories Panel -->

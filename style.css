@@ -344,6 +344,26 @@ main {
 }
 
 /* Category Filters */
+.category-header-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    gap: 15px;
+}
+
+.category-header-wrap .header-side {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.category-header-wrap .header-center {
+    margin: 0;
+    text-align: center;
+    white-space: nowrap;
+}
+
 .open-categories-btn {
     background: white;
     border: 1px solid rgba(0, 0, 0, 0.1);
@@ -357,6 +377,19 @@ main {
     gap: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
+    z-index: 2;
+}
+
+@media (max-width: 600px) {
+    .category-header-wrap {
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .category-header-wrap .header-side {
+        width: 100%;
+        justify-content: center;
+    }
 }
 
 .open-categories-btn .down-icon {
