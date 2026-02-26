@@ -109,13 +109,39 @@ async function fetchItems() {
 // Render Functions
 function renderCategories() {
     // Keep the "All" button, append the rest
-    let html = `<button class="filter-btn active" data-id="all">الكل</button>`;
+    let html = `<button class="filter-btn active" data-id="all">
+                    <div class="icon-wrapper"><i class="fa-solid fa-layer-group"></i></div>
+                    <span>الرئيسية (الكل)</span>
+                </button>`;
 
     allCategories.forEach(cat => {
-        html += `<button class="filter-btn" data-id="${cat.id}">${cat.name}</button>`;
+        const icon = getCategoryIcon(cat.name);
+        html += `<button class="filter-btn" data-id="${cat.id}">
+                    <div class="icon-wrapper">${icon}</div>
+                    <span>${cat.name}</span>
+                 </button>`;
     });
 
-    categoriesContainer.innerHTML = html;
+    const categoriesContainer = document.getElementById('categoriesContainer');
+    if (categoriesContainer) {
+        categoriesContainer.innerHTML = html;
+    }
+}
+
+function getCategoryIcon(name) {
+    if (name.includes('أجهزة') || name.includes('جهاز')) return '<i class="fa-solid fa-stethoscope"></i>';
+    if (name.includes('عناية') || name.includes('بشرة') || name.includes('تجميل')) return '<i class="fa-solid fa-hands-bubbles"></i>';
+    if (name.includes('مستهلكات') || name.includes('مستلزمات')) return '<i class="fa-solid fa-box-open"></i>';
+    if (name.includes('أثاث') || name.includes('فرش') || name.includes('سرير')) return '<i class="fa-solid fa-bed-pulse"></i>';
+    if (name.includes('تحاليل') || name.includes('مختبر') || name.includes('معمل')) return '<i class="fa-solid fa-flask-vial"></i>';
+    if (name.includes('أسنان')) return '<i class="fa-solid fa-tooth"></i>';
+    if (name.includes('عظام')) return '<i class="fa-solid fa-bone"></i>';
+    if (name.includes('عيون')) return '<i class="fa-solid fa-eye"></i>';
+    if (name.includes('تنفس') || name.includes('أكسجين')) return '<i class="fa-solid fa-lungs"></i>';
+    if (name.includes('جراحة')) return '<i class="fa-solid fa-scalpel"></i>';
+    if (name.includes('حقن') || name.includes('سرنجات')) return '<i class="fa-solid fa-syringe"></i>';
+    if (name.includes('قياس') || name.includes('ضغط') || name.includes('سكر')) return '<i class="fa-solid fa-temperature-half"></i>';
+    return '<i class="fa-solid fa-heart-pulse"></i>';
 }
 
 function renderItems(itemsToRender) {
@@ -208,14 +234,22 @@ function filterByCategory(event, categoryId) {
     // Update State
     currentCategoryId = categoryId;
 
-    // Update UI Buttons
+    // Update UI Buttons and Button Text
     document.querySelectorAll('.filter-btn').forEach(btn => {
         if (btn.getAttribute('data-id') == categoryId) {
             btn.classList.add('active');
+            const catNameSpan = btn.querySelector('span');
+            if (catNameSpan && document.getElementById('currentCategoryText')) {
+                // If it's the "all" category, it might say "الرئيسية (الكل)", we can map it to "اختر القسم" or something nicer.
+                // Or just let it be. 'الرئيسية (الكل)' is perfectly fine.
+                document.getElementById('currentCategoryText').textContent = catNameSpan.textContent;
+            }
         } else {
             btn.classList.remove('active');
         }
     });
+
+    closeCategoriesModal();
 
     // Clear search if any to see full category
     searchInput.value = '';
@@ -324,6 +358,30 @@ window.addEventListener('click', function (event) {
     else if (event.target == contactSheet && contactSheet.classList.contains('show')) history.back();
     else if (event.target == checkoutModal && checkoutModal.classList.contains('show')) history.back();
 });
+
+// ==== Categories Panel Functionality ====
+function toggleCategoriesPanel() {
+    const categoriesPanel = document.getElementById('categoriesPanel');
+    const btn = document.getElementById('openCategoriesBtn');
+    if (!categoriesPanel) return;
+
+    if (categoriesPanel.classList.contains('show')) {
+        categoriesPanel.classList.remove('show');
+        if (btn) btn.classList.remove('active-btn');
+    } else {
+        categoriesPanel.classList.add('show');
+        if (btn) btn.classList.add('active-btn');
+    }
+}
+
+function closeCategoriesModal() {
+    const categoriesPanel = document.getElementById('categoriesPanel');
+    const btn = document.getElementById('openCategoriesBtn');
+    if (categoriesPanel && categoriesPanel.classList.contains('show')) {
+        categoriesPanel.classList.remove('show');
+        if (btn) btn.classList.remove('active-btn');
+    }
+}
 
 // ==== Image Lightbox Functionality ====
 let isLightboxOpen = false;
