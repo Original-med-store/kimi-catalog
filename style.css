@@ -1474,11 +1474,16 @@ footer {
         justify-content: center;
         align-items: center;
         padding: 0;
-        background: #febd69;
-        /* لون زر أمازون البرتقالي */
-        color: #111;
+        background: var(--primary);
+        /* اللون الأساسي للمتجر بدلاً من الأصفر */
+        color: white;
         border-radius: 0;
         /* شكل مربع للزر */
+    }
+
+    .search-box input::placeholder {
+        color: #888;
+        font-weight: 400;
     }
 
     .search-box button i {
