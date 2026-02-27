@@ -116,8 +116,14 @@
                 <!-- Centered Title -->
                 <h2 class="section-title header-center">الكتالوج</h2>
 
-                <!-- Left Ghost for Balance -->
-                <div class="header-side"></div>
+                <!-- Left-aligned Sort Dropdown -->
+                <div class="header-side sort-side">
+                    <select id="sortSelect" class="sort-select">
+                        <option value="default">الترتيب الافتراضي</option>
+                        <option value="price-asc">السعر: من الأقل للأعلى</option>
+                        <option value="price-desc">السعر: من الأعلى للأقل</option>
+                    </select>
+                </div>
             </div>
 
             <!-- In-page Categories Panel -->
@@ -138,6 +144,13 @@
         <section class="items-grid" id="itemsGrid">
             <!-- Items will be injected here via JS -->
         </section>
+
+        <!-- Load More Section -->
+        <div id="loadMoreContainer" style="text-align: center; margin: 40px 0; display: none;">
+            <button id="loadMoreBtn" class="load-more-btn">
+                <i class="fa-solid fa-rotate-right"></i> عرض المزيد
+            </button>
+        </div>
 
         <!-- No Results Message -->
         <div id="noResults" class="no-results hidden">
@@ -334,6 +347,47 @@
 
     <!-- Toast Notification -->
     <div id="toast" class="toast hidden">تمت الإضافة للسلة بنجاح!</div>
+
+    <!-- Product Details Modal (Quick View) -->
+    <div id="productDetailsModal" class="modal hidden" style="z-index: 2500;">
+        <div class="modal-content product-modal-content">
+            <span class="close-modal" onclick="closeProductModal()">&times;</span>
+            <div class="product-details-grid">
+                <!-- Right Side: Image -->
+                <div class="product-modal-image">
+                    <img id="modalProductImg" src="" alt="صورة المنتج">
+                    <span id="modalProductStock" class="stock-badge">متوفر</span>
+                </div>
+                <!-- Left Side: Details -->
+                <div class="product-modal-info">
+                    <p id="modalProductCategory" class="modal-category">القسم</p>
+                    <h2 id="modalProductName" class="modal-title">اسم المنتج</h2>
+                    <div class="modal-price-box">
+                        <span id="modalProductPrice" class="modal-price">0.00</span>
+                        <span class="currency">ج.م</span>
+                    </div>
+
+                    <div class="modal-description-box">
+                        <h3>📖 تفاصيل ومواصفات المنتج:</h3>
+                        <p id="modalProductDesc" class="modal-desc-text">
+                            (لمعرفة المواصفات الدقيقة والميزات التقنية لهذا الجهاز، يسعدنا تواصلكم المباشر معنا عبر
+                            واتساب للمساعدة)
+                        </p>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button id="modalAddToCartBtn" class="primary-btn checkout-btn">
+                            <i class="fa-solid fa-cart-plus"></i> إضافة للسلة
+                        </button>
+                        <button id="modalWhatsappBtn" class="whatsapp-btn checkout-btn"
+                            style="background:#25d366; color:#fff;">
+                            <i class="fa-brands fa-whatsapp"></i> استفسار / طلب عبر واتساب
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Mobile Bottom Navigation -->
     <nav class="bottom-nav">

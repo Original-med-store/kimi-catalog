@@ -144,17 +144,33 @@ function getCategoryIcon(name) {
     return '<i class="fa-solid fa-heart-pulse"></i>';
 }
 
-function renderItems(itemsToRender) {
-    if (itemsToRender.length === 0) {
+let currentRenderedItems = [];
+let currentPage = 1;
+const ITEMS_PER_PAGE = 50; // Show 50 items initially
+
+function renderItems(itemsToRender, append = false) {
+    if (!append) {
         itemsGrid.innerHTML = '';
+        currentPage = 1;
+        currentRenderedItems = itemsToRender;
+    }
+
+    const loadMoreContainer = document.getElementById('loadMoreContainer');
+
+    if (currentRenderedItems.length === 0) {
         noResults.classList.remove('hidden');
+        if (loadMoreContainer) loadMoreContainer.style.display = 'none';
         return;
     }
 
     noResults.classList.add('hidden');
     let html = '';
 
-    itemsToRender.forEach((item, index) => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    const itemsSlice = currentRenderedItems.slice(startIndex, endIndex);
+
+    itemsSlice.forEach((item, index) => {
         const imgUrl = item.image_url ? item.image_url : FALLBACK_IMG;
         const stockStatus = `<span class="in-stock" style="color:#2ba968;"><i class="fa-solid fa-check-circle"></i> متوفر</span>`;
 
@@ -163,7 +179,7 @@ function renderItems(itemsToRender) {
 
         html += `
             <div class="item-card slide-up" style="animation-delay: ${animDelay}s">
-                <div class="card-img-container" onclick="openLightbox('${imgUrl}', '${item.name}')">
+                <div class="card-img-container" onclick="openProductModal('${item.id}')">
                     <img src="${imgUrl}" alt="${item.name}" class="card-img" onerror="this.src='${FALLBACK_IMG}'">
                 </div>
                 <div class="card-body">
@@ -184,7 +200,20 @@ function renderItems(itemsToRender) {
             </div>`;
     });
 
-    itemsGrid.innerHTML = html;
+    if (append) {
+        itemsGrid.insertAdjacentHTML('beforeend', html);
+    } else {
+        itemsGrid.innerHTML = html;
+        // Scroll reset not strictly needed but good to know we start fresh
+    }
+
+    if (loadMoreContainer) {
+        if (endIndex < currentRenderedItems.length) {
+            loadMoreContainer.style.display = 'block';
+        } else {
+            loadMoreContainer.style.display = 'none';
+        }
+    }
 }
 
 // Logic & Interaction
@@ -217,6 +246,17 @@ function filterAndSearch() {
                 top: offsetPosition,
                 behavior: "smooth"
             });
+        }
+    }
+
+    // Apply sorting
+    const sortSelect = document.getElementById('sortSelect');
+    if (sortSelect) {
+        const sortValue = sortSelect.value;
+        if (sortValue === 'price-asc') {
+            filtered.sort((a, b) => parseFloat(a.sale_price) - parseFloat(b.sale_price));
+        } else if (sortValue === 'price-desc') {
+            filtered.sort((a, b) => parseFloat(b.sale_price) - parseFloat(a.sale_price));
         }
     }
 
@@ -279,6 +319,21 @@ function setupEventListeners() {
         if (e.key === 'Enter') filterAndSearch();
     });
 
+    // Sorting dropdown
+    const sortSelect = document.getElementById('sortSelect');
+    if (sortSelect) {
+        sortSelect.addEventListener('change', filterAndSearch);
+    }
+
+    // Load More Button
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', () => {
+            currentPage++;
+            renderItems(currentRenderedItems, true);
+        });
+    }
+
     // Category clicking (Event Delegation)
     categoriesContainer.addEventListener('click', (e) => {
         const btn = e.target.closest('.filter-btn');
@@ -321,7 +376,13 @@ function closeTopMostModal() {
         closedAny = true;
     } else if (checkoutModal && checkoutModal.classList.contains('show')) {
         checkoutModal.classList.remove('show');
-        setTimeout(() => checkoutModal.classList.add('hidden'), 300);
+        setTimeout(() => modal.classList.add('hidden'), 300);
+        isLightboxOpen = false;
+        closedAny = true;
+    } else if (document.getElementById('productDetailsModal') && document.getElementById('productDetailsModal').classList.contains('show')) {
+        const pModal = document.getElementById('productDetailsModal');
+        pModal.classList.remove('show');
+        setTimeout(() => pModal.classList.add('hidden'), 300);
         closedAny = true;
     } else if (authModal && authModal.classList.contains('show')) {
         authModal.classList.remove('show');
@@ -346,6 +407,7 @@ window.addEventListener('popstate', function () {
 window.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
         const isOpen = isLightboxOpen ||
+            (document.getElementById('productDetailsModal') && document.getElementById('productDetailsModal').classList.contains('show')) ||
             (authModal && authModal.classList.contains('show')) ||
             (cartSidebar && cartSidebar.classList.contains('show-sidebar')) ||
             (checkoutModal && checkoutModal.classList.contains('show')) ||
@@ -356,7 +418,9 @@ window.addEventListener('keydown', function (e) {
 });
 
 window.addEventListener('click', function (event) {
+    const pModal = document.getElementById('productDetailsModal');
     if (event.target == modal && isLightboxOpen) history.back();
+    else if (event.target == pModal && pModal.classList.contains('show')) history.back();
     else if (event.target == authModal && authModal.classList.contains('show')) history.back();
     else if (event.target == contactSheet && contactSheet.classList.contains('show')) history.back();
     else if (event.target == checkoutModal && checkoutModal.classList.contains('show')) history.back();
@@ -405,6 +469,81 @@ function closeLightbox() {
 
 closeModal.onclick = function () {
     if (isLightboxOpen) history.back();
+}
+
+// ==== Product Details Modal Functionality ====
+function openProductModal(itemId) {
+    const item = allItems.find(i => String(i.id) === String(itemId));
+    if (!item) return;
+
+    const modal = document.getElementById('productDetailsModal');
+    if (!modal) return;
+
+    // Populate Data
+    const imgUrl = item.image_url ? item.image_url : FALLBACK_IMG;
+    document.getElementById('modalProductImg').src = imgUrl;
+
+    // Fallback on error
+    document.getElementById('modalProductImg').onerror = function () {
+        this.src = FALLBACK_IMG;
+    };
+
+    document.getElementById('modalProductCategory').textContent = item.category_name || 'بدون قسم';
+    document.getElementById('modalProductName').textContent = item.name;
+    document.getElementById('modalProductPrice').textContent = parseFloat(item.sale_price).toFixed(2);
+
+    // Stock Badge
+    const stockBadge = document.getElementById('modalProductStock');
+    if (item.stock > 0 || item.stock === null || item.stock === undefined) {
+        stockBadge.textContent = 'متوفر';
+        stockBadge.style.background = '#2ecc71';
+    } else {
+        stockBadge.textContent = 'غير متوفر';
+        stockBadge.style.background = '#e74c3c';
+    }
+
+    // Description
+    const descEl = document.getElementById('modalProductDesc');
+    if (item.description && item.description.trim() !== '') {
+        descEl.textContent = item.description;
+    } else {
+        descEl.textContent = '(لمعرفة المواصفات الدقيقة والميزات التقنية لهذا الجهاز، يسعدنا تواصلكم المباشر معنا عبر واتساب للمساعدة)';
+    }
+
+    // Set buttons actions
+    const addToCartBtn = document.getElementById('modalAddToCartBtn');
+    // Clear old listeners by cloning
+    const newAddToCartBtn = addToCartBtn.cloneNode(true);
+    addToCartBtn.parentNode.replaceChild(newAddToCartBtn, addToCartBtn);
+
+    newAddToCartBtn.onclick = function () {
+        addToCart(item.id, item.name, item.sale_price, imgUrl);
+    };
+
+    const whatsappBtn = document.getElementById('modalWhatsappBtn');
+    const newWhatsappBtn = whatsappBtn.cloneNode(true);
+    whatsappBtn.parentNode.replaceChild(newWhatsappBtn, whatsappBtn);
+
+    newWhatsappBtn.onclick = function () {
+        const message = `مرحباً، أود الاستفسار عن المنتج:\n*${item.name}*\nالسعر: ${parseFloat(item.sale_price).toFixed(2)} ج.م\nالقسم: ${item.category_name}\nالكود: ${item.id}`;
+        const whatsappNumber = '201501882143'; // Default contact number
+        const encodedMessage = encodeURIComponent(message);
+        window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
+    };
+
+    // Show Modal
+    modal.classList.remove('hidden');
+    modal.classList.add("show");
+
+    // Push State for browser back button
+    history.pushState({ modal: true, type: 'product' }, "");
+}
+
+function closeProductModal() {
+    const pModal = document.getElementById('productDetailsModal');
+    if (pModal && pModal.classList.contains('show')) {
+        history.back();
+    }
 }
 
 // ==== Auth Modal Functionality ====
