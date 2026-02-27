@@ -518,7 +518,7 @@ function openProductModal(itemId) {
     if (item.description && item.description.trim() !== '') {
         descEl.textContent = item.description;
     } else {
-        descEl.textContent = '(لمعرفة المواصفات الدقيقة والميزات التقنية لهذا الجهاز، يسعدنا تواصلكم المباشر معنا عبر واتساب للمساعدة)';
+        descEl.textContent = '(للإستفسار أو السؤال عن تفاصيل ومواصفات هذا الصنف، يسعدنا تواصلكم المباشر معنا عبر واتساب)';
     }
 
     // Set buttons actions
