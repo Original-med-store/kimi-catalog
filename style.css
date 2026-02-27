@@ -624,49 +624,31 @@ main {
 
 .filter-btn {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-width: 70px;
-    min-height: 75px;
-    padding: 8px 4px;
-    border-radius: 12px;
+    width: 85px;
+    height: 85px;
+    padding: 10px;
+    border-radius: 50%;
+    /* Make it a circle */
     background: #ffffff;
     color: var(--text);
-    font-weight: 700;
-    font-size: 0.8rem;
+    font-weight: 800;
+    font-size: 0.85rem;
+    /* Larger font since no icon */
     border: 1px solid rgba(0, 0, 0, 0.05);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    gap: 6px;
     white-space: normal;
     text-align: center;
     flex-shrink: 0;
-}
-
-.filter-btn .icon-wrapper {
-    font-size: 1.2rem;
-    color: var(--secondary);
-    transition: all 0.3s ease;
-    background: rgba(58, 123, 213, 0.08);
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
+    line-height: 1.2;
 }
 
 .filter-btn:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     border-color: rgba(58, 123, 213, 0.2);
-}
-
-.filter-btn:hover .icon-wrapper {
-    transform: scale(1.1);
-    background: var(--secondary);
-    color: white;
 }
 
 .filter-btn.active {
@@ -1700,21 +1682,18 @@ footer {
 
     /* Further condense category grid on mobile */
     .categories-grid {
-        grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
         gap: 8px;
     }
 
     .filter-btn {
-        min-width: 60px;
-        min-height: 65px;
-        padding: 5px 2px;
-        border-radius: 8px;
-        font-size: 0.7rem;
-        gap: 4px;
-    }
-
-    .filter-btn .icon-wrapper {
-        font-size: 1rem;
+        width: 75px;
+        height: 75px;
+        padding: 8px;
+        border-radius: 50%;
+        font-size: 0.75rem;
+        /* Larger font size now that the icon is gone */
+        line-height: 1.2;
     }
 
     /* Mobile Sub Header (Logo Bar) */

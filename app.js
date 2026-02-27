@@ -110,14 +110,11 @@ async function fetchItems() {
 function renderCategories() {
     // Keep the "All" button, append the rest
     let html = `<button class="filter-btn active" data-id="all">
-                    <div class="icon-wrapper"><i class="fa-solid fa-layer-group"></i></div>
                     <span>الرئيسية (الكل)</span>
                 </button>`;
 
     allCategories.forEach(cat => {
-        const icon = getCategoryIcon(cat.name);
         html += `<button class="filter-btn" data-id="${cat.id}">
-                    <div class="icon-wrapper">${icon}</div>
                     <span>${cat.name}</span>
                  </button>`;
     });
@@ -126,22 +123,6 @@ function renderCategories() {
     if (categoriesContainer) {
         categoriesContainer.innerHTML = html;
     }
-}
-
-function getCategoryIcon(name) {
-    if (name.includes('أجهزة') || name.includes('جهاز')) return '<i class="fa-solid fa-stethoscope"></i>';
-    if (name.includes('عناية') || name.includes('بشرة') || name.includes('تجميل')) return '<i class="fa-solid fa-hands-bubbles"></i>';
-    if (name.includes('مستهلكات') || name.includes('مستلزمات')) return '<i class="fa-solid fa-box-open"></i>';
-    if (name.includes('أثاث') || name.includes('فرش') || name.includes('سرير')) return '<i class="fa-solid fa-bed-pulse"></i>';
-    if (name.includes('تحاليل') || name.includes('مختبر') || name.includes('معمل')) return '<i class="fa-solid fa-flask-vial"></i>';
-    if (name.includes('أسنان')) return '<i class="fa-solid fa-tooth"></i>';
-    if (name.includes('عظام')) return '<i class="fa-solid fa-bone"></i>';
-    if (name.includes('عيون')) return '<i class="fa-solid fa-eye"></i>';
-    if (name.includes('تنفس') || name.includes('أكسجين')) return '<i class="fa-solid fa-lungs"></i>';
-    if (name.includes('جراحة')) return '<i class="fa-solid fa-scalpel"></i>';
-    if (name.includes('حقن') || name.includes('سرنجات')) return '<i class="fa-solid fa-syringe"></i>';
-    if (name.includes('قياس') || name.includes('ضغط') || name.includes('سكر')) return '<i class="fa-solid fa-temperature-half"></i>';
-    return '<i class="fa-solid fa-heart-pulse"></i>';
 }
 
 let currentRenderedItems = [];
