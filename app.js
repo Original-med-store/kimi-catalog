@@ -311,7 +311,16 @@ function filterByCategory(event, categoryId) {
 
 function setupEventListeners() {
     // Search input
-    searchInput.addEventListener('input', filterAndSearch);
+    searchInput.addEventListener('input', handleLiveSearch);
+
+    // Hide dropdown on clicking outside
+    document.addEventListener('mousedown', (e) => {
+        const d = document.getElementById('searchResultsDropdown');
+        if (d && !e.target.closest('.search-container')) {
+            d.classList.add('hidden');
+        }
+    });
+
     searchBtn.addEventListener('click', filterAndSearch);
 
     // Enter key in search
@@ -530,6 +539,9 @@ function openProductModal(itemId) {
         const encodedMessage = encodeURIComponent(message);
         window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
     };
+
+    // Show Related Products
+    renderRelatedProducts(item);
 
     // Show Modal
     modal.classList.remove('hidden');
@@ -944,3 +956,91 @@ loadCustomerData();
 
 // Start Application
 document.addEventListener('DOMContentLoaded', init);
+
+// ==========================================
+// Live Search Dropdown Logic
+// ==========================================
+function handleLiveSearch(e) {
+    const query = e.target.value.toLowerCase().trim();
+    const dropdown = document.getElementById('searchResultsDropdown');
+
+    if (query.length < 2) {
+        dropdown.classList.add('hidden');
+        if (query.length === 0) filterAndSearch();
+        return;
+    }
+
+    const results = allItems.filter(item =>
+        (item.name && item.name.toLowerCase().includes(query)) ||
+        (item.category_name && item.category_name.toLowerCase().includes(query))
+    ).slice(0, 6);
+
+    if (results.length === 0) {
+        dropdown.innerHTML = '<div class="search-dropdown-item" style="justify-content:center; color:#999;">لا توجد نتائج مطابقة</div>';
+    } else {
+        dropdown.innerHTML = '';
+        results.forEach(item => {
+            const a = document.createElement('a');
+            a.href = "javascript:void(0);";
+            a.className = 'search-dropdown-item';
+            a.style.display = 'flex'; // Ensure flex works on anchor
+            a.style.textDecoration = 'none'; // No underline
+            a.style.color = 'inherit';
+
+            a.innerHTML = `
+                <img src="${item.image_url || FALLBACK_IMG}" onerror="this.onerror=null;this.src='${FALLBACK_IMG}';" alt="${item.name}">
+                <div class="search-dropdown-info">
+                    <div class="search-dropdown-name">${item.name}</div>
+                    <div class="search-dropdown-cat">${item.category_name || ''}</div>
+                </div>
+                <div class="search-dropdown-price">${parseFloat(item.sale_price).toFixed(2)} ج.م</div>
+            `;
+
+            // Explicitly handle all click interactions directly on the anchor
+            const openAction = (e) => {
+                e.preventDefault();
+                document.getElementById('searchInput').value = '';
+                dropdown.classList.add('hidden');
+                openProductModal(item.id);
+            };
+
+            a.addEventListener('mousedown', openAction);
+            a.addEventListener('click', openAction);
+            dropdown.appendChild(a);
+        });
+    }
+
+    dropdown.classList.remove('hidden');
+}
+
+// ==========================================
+// Related Products Logic
+// ==========================================
+function renderRelatedProducts(currentItem) {
+    const container = document.getElementById('relatedProductsContainer');
+    const scrollArea = document.getElementById('relatedProductsScroll');
+
+    if (!currentItem || !currentItem.category_id) {
+        container.classList.add('hidden');
+        return;
+    }
+
+    const related = allItems.filter(i =>
+        i.category_id === currentItem.category_id && i.id !== currentItem.id
+    ).slice(0, 6);
+
+    if (related.length === 0) {
+        container.classList.add('hidden');
+        return;
+    }
+
+    container.classList.remove('hidden');
+
+    scrollArea.innerHTML = related.map(item => `
+        <div class="related-product-card" onclick="openProductModal('${item.id}')">
+            <img class="related-product-img" src="${item.image_url || FALLBACK_IMG}" onerror="this.onerror=null;this.src='${FALLBACK_IMG}';" alt="${item.name}">
+            <div class="related-product-name" title="${item.name}">${item.name}</div>
+            <div class="related-product-price">${parseFloat(item.sale_price).toFixed(2)} ج.م</div>
+        </div>
+    `).join('');
+}

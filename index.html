@@ -57,10 +57,14 @@
                 </button>
             </div>
             <!-- Search Box (Moved up for mobile sticky header like Amazon) -->
-            <div class="search-box">
-                <i class="fa-solid fa-search desktop-icon"></i>
-                <input type="text" id="searchInput" placeholder="بحث في Original MED">
-                <button id="searchBtn"><i class="fa-solid fa-search"></i><span>بحث</span></button>
+            <div class="search-container" style="position: relative; flex: 1; max-width: 500px; margin: 0 20px;">
+                <div class="search-box" style="margin: 0; max-width: 100%;">
+                    <i class="fa-solid fa-search desktop-icon"></i>
+                    <input type="text" id="searchInput" placeholder="بحث في Original MED" autocomplete="off">
+                    <button id="searchBtn"><i class="fa-solid fa-search"></i><span>بحث</span></button>
+                </div>
+                <!-- Live Search Dropdown -->
+                <div id="searchResultsDropdown" class="search-dropdown hidden"></div>
             </div>
         </div>
 
@@ -384,6 +388,14 @@
                             <i class="fa-brands fa-whatsapp"></i> استفسار / طلب عبر واتساب
                         </button>
                     </div>
+                </div>
+            </div>
+
+            <!-- Related Products Section -->
+            <div id="relatedProductsContainer" class="related-products-section hidden">
+                <h3 class="related-title">منتجات مشابهة قد تعجبك</h3>
+                <div class="related-products-scroll" id="relatedProductsScroll">
+                    <!-- Products injected via JS -->
                 </div>
             </div>
         </div>

@@ -85,7 +85,8 @@ button {
     justify-content: space-between;
     align-items: center;
     box-shadow: var(--glass-shadow);
-    z-index: 10;
+    z-index: 100;
+    /* Increased to ensure dropdown overlays hero-content properly */
 }
 
 .logo {
@@ -196,7 +197,8 @@ button {
 }
 
 .search-box button {
-    background: linear-gradient(to right, var(--primary), var(--secondary));
+    background: linear-gradient(to right, #ff9900, #ffb84d);
+    /* Attractive orange */
     color: white;
     padding: 12px 30px;
     border-radius: 40px;
@@ -1437,8 +1439,14 @@ footer {
         box-shadow: none;
     }
 
+    .hero-section {
+        min-height: auto;
+        padding-bottom: 20px;
+    }
+
     .hero-content h1 {
-        font-size: 2.2rem;
+        font-size: 1.5rem;
+        margin-bottom: 10px;
     }
 
     /* Amazon style sticky search header */
@@ -1502,8 +1510,8 @@ footer {
         justify-content: center;
         align-items: center;
         padding: 0;
-        background: var(--primary);
-        /* اللون الأساسي للمتجر بدلاً من الأصفر */
+        background: #ff9900;
+        /* جذاب برتقالي بدلاً من الأساسي */
         color: white;
         border-radius: 0;
         /* شكل مربع للزر */
@@ -1526,7 +1534,31 @@ footer {
     /* Adjust Hero Content to unhide under sticky nav and sub-header */
     .hero-content {
         margin-top: 100px;
-        /* تعويض مساحة الشريط العلوي واللوجو */
+        padding: 10px;
+    }
+
+    .hero-features {
+        margin-top: 10px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        justify-content: flex-start;
+        padding-bottom: 10px;
+        scrollbar-width: none;
+        /* Firefox */
+        -ms-overflow-style: none;
+        /* IE and Edge */
+        gap: 10px;
+    }
+
+    .hero-features::-webkit-scrollbar {
+        display: none;
+        /* Chrome, Safari and Opera */
+    }
+
+    .hero-badge {
+        flex: 0 0 auto;
+        font-size: 0.8rem;
+        padding: 6px 12px;
     }
 
     /* Mobile Sub Header (Logo Bar) */
@@ -1709,7 +1741,8 @@ footer {
 /* Product Details Modal (Quick View) */
 /* ========================================================================= */
 .product-modal-content {
-    max-width: 900px;
+    max-width: 950px;
+    /* slightly wider to fit side-by-side better */
     width: 95%;
     /* Better width on smaller desktops */
     max-height: 92vh;
@@ -1722,6 +1755,8 @@ footer {
     /* Firefox */
     border-radius: 15px;
     position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 .product-modal-content::-webkit-scrollbar {
@@ -1761,17 +1796,17 @@ footer {
 
 .product-modal-image {
     background: #f8f9fa;
-    padding: 30px;
+    padding: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    min-height: 300px;
+    min-height: 250px;
 }
 
 .product-modal-image img {
     max-width: 100%;
-    max-height: 400px;
+    max-height: 300px;
     object-fit: contain;
     filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
 }
@@ -1790,7 +1825,7 @@ footer {
 }
 
 .product-modal-info {
-    padding: 40px;
+    padding: 20px 30px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -1804,27 +1839,27 @@ footer {
 }
 
 .modal-title {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     color: var(--darker);
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     line-height: 1.3;
 }
 
 .modal-price-box {
-    margin-bottom: 25px;
+    margin-bottom: 15px;
     display: flex;
     align-items: baseline;
     gap: 5px;
 }
 
 .modal-price {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     font-weight: 900;
     color: var(--primary);
 }
 
 .modal-price-box .currency {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: bold;
     color: #7f8c8d;
 }
@@ -1832,9 +1867,9 @@ footer {
 .modal-description-box {
     background: #fdfdfd;
     border: 1px solid #eee;
-    padding: 20px;
+    padding: 15px;
     border-radius: 10px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .modal-description-box h3 {
@@ -1931,4 +1966,176 @@ footer {
     .toast {
         bottom: 40px;
     }
+}
+
+/* ========================================================================= */
+/* Live Search Dropdown */
+/* ========================================================================= */
+.search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    margin-top: 10px;
+    max-height: 400px;
+    overflow-y: auto;
+    z-index: 3000;
+    border: 1px solid #eee;
+    padding: 10px 0;
+}
+
+.search-dropdown.hidden {
+    display: none;
+}
+
+.search-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+    border-bottom: 1px solid #f5f5f5;
+    user-select: none;
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.search-dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.search-dropdown-item:hover {
+    background: #f0f8ff;
+    /* subtle highlight */
+}
+
+/* Children shouldn't block mousedown if we use standard event bubbling */
+.search-dropdown-item img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.search-dropdown-info {
+    flex: 1;
+}
+
+.search-dropdown-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--darker);
+    margin-bottom: 3px;
+}
+
+.search-dropdown-cat {
+    font-size: 0.8rem;
+    color: var(--secondary);
+}
+
+.search-dropdown-price {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--primary);
+}
+
+@media (max-width: 768px) {
+    .search-container {
+        position: static !important;
+    }
+
+    .search-dropdown {
+        left: 20px;
+        right: 20px;
+        top: 45px;
+    }
+}
+
+/* ========================================================================= */
+/* Related Products Section */
+/* ========================================================================= */
+.related-products-section {
+    margin: 5px 20px 10px 20px;
+    padding-top: 10px;
+    border-top: 2px solid #eee;
+}
+
+@media (max-width: 768px) {
+    .related-products-section {
+        margin: 5px 10px 10px 10px;
+    }
+}
+
+.related-products-section.hidden {
+    display: none;
+}
+
+.related-title {
+    font-size: 1rem;
+    color: var(--darker);
+    margin-bottom: 10px;
+    font-weight: 800;
+}
+
+.related-products-scroll {
+    display: flex;
+    flex-wrap: wrap;
+    /* Changed to wrap so they show on mostly same screen */
+    gap: 10px;
+    padding-bottom: 15px;
+    justify-content: center;
+}
+
+.related-product-card {
+    min-width: 110px;
+    max-width: 120px;
+    /* Reduced max width */
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 8px;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+}
+
+.related-product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    border-color: var(--primary);
+}
+
+.related-product-img {
+    width: 100%;
+    height: 70px;
+    /* Reduced image height */
+    object-fit: contain;
+    margin-bottom: 5px;
+}
+
+.related-product-name {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 5px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.related-product-price {
+    margin-top: auto;
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: var(--primary);
 }
