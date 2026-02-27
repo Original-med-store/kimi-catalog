@@ -222,16 +222,11 @@ function filterAndSearch() {
 
     let filtered = allItems;
 
-    // Filter by Category
-    if (currentCategoryId !== 'all') {
-        filtered = filtered.filter(item => item.category_id == currentCategoryId);
-    }
-
-    // Search by text
+    // Search by text takes priority over category filter
     if (searchTerm !== '') {
         filtered = filtered.filter(item =>
             item.name.toLowerCase().includes(searchTerm) ||
-            item.category_name.toLowerCase().includes(searchTerm)
+            (item.category_name && item.category_name.toLowerCase().includes(searchTerm))
         );
 
         // Auto-scroll to catalog when specifically typing a search
@@ -246,6 +241,11 @@ function filterAndSearch() {
                 top: offsetPosition,
                 behavior: "smooth"
             });
+        }
+    } else {
+        // If no search term, filter by Category
+        if (currentCategoryId !== 'all') {
+            filtered = filtered.filter(item => item.category_id == currentCategoryId);
         }
     }
 
@@ -280,9 +280,11 @@ function filterByCategory(event, categoryId) {
             btn.classList.add('active');
             const catNameSpan = btn.querySelector('span');
             if (catNameSpan && document.getElementById('currentCategoryText')) {
-                // If it's the "all" category, it might say "الرئيسية (الكل)", we can map it to "اختر القسم" or something nicer.
-                // Or just let it be. 'الرئيسية (الكل)' is perfectly fine.
-                document.getElementById('currentCategoryText').textContent = catNameSpan.textContent;
+                if (categoryId === 'all') {
+                    document.getElementById('currentCategoryText').textContent = 'الرئيسية (الكل)';
+                } else {
+                    document.getElementById('currentCategoryText').textContent = catNameSpan.textContent;
+                }
             }
         } else {
             btn.classList.remove('active');
