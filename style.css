@@ -345,44 +345,75 @@ main {
     font-weight: 800;
 }
 
-/* Category Filters */
-.category-header-wrap {
+/* Category Filters (Refactored Layout) */
+.catalog-header-container {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 15px;
+    flex-direction: column;
+    margin-bottom: 20px;
     gap: 15px;
 }
 
-.category-header-wrap .header-side {
-    flex: 1;
-    display: flex;
-    justify-content: flex-start;
-}
-
-.category-header-wrap .header-center {
+.catalog-main-title {
     margin: 0;
     text-align: center;
-    white-space: nowrap;
+    font-size: 2.2rem;
+    color: var(--dark);
+    font-weight: 800;
 }
 
-.category-header-wrap .sort-side {
-    justify-content: flex-end;
+.category-filters-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* Spread them apart */
+    gap: 15px;
+    width: 100%;
+}
+
+@media (min-width: 769px) {
+    .catalog-header-container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .catalog-main-title {
+        text-align: left;
+        margin-right: auto;
+        margin-left: 20px;
+    }
+
+    .category-filters-row {
+        width: auto;
+        justify-content: flex-end;
+    }
 }
 
 .sort-select {
-    padding: 8px 12px;
-    border-radius: 8px;
+    padding: 10px 15px;
+    border-radius: 30px;
     border: 1px solid rgba(0, 0, 0, 0.1);
     background: white;
     font-family: 'Cairo', sans-serif;
     color: var(--dark);
     font-size: 0.95rem;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     outline: none;
     transition: all 0.3s ease;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    height: 45px;
+    /* Fixed height to match button */
+    appearance: none;
+    /* remove default arrow to style better */
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: left 15px center;
+    /* Arrow on the left (RTL) */
+    background-size: 15px;
+    padding-left: 35px;
+    /* Make space for arrow */
 }
 
 .sort-select:hover,
@@ -393,17 +424,45 @@ main {
 .open-categories-btn {
     background: white;
     border: 1px solid rgba(0, 0, 0, 0.1);
-    padding: 10px 20px;
+    padding: 10px 15px;
     border-radius: 30px;
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     font-weight: 700;
     color: var(--dark);
     display: flex;
     align-items: center;
-    gap: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    gap: 8px;
+    cursor: pointer;
     transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    height: 45px;
+    flex: 1;
+    justify-content: center;
     z-index: 2;
+}
+
+@media (max-width: 768px) {
+    .catalog-main-title {
+        font-size: 1.8rem;
+    }
+
+    .category-filters-row {
+        gap: 10px;
+    }
+
+    .open-categories-btn {
+        font-size: 0.85rem;
+        padding: 8px 10px;
+        height: 40px;
+    }
+
+    .sort-select {
+        flex: 1;
+        font-size: 0.85rem;
+        padding: 8px 10px;
+        padding-left: 30px;
+        height: 40px;
+    }
 }
 
 @media (max-width: 600px) {

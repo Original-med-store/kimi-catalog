@@ -107,25 +107,20 @@
 
         <!-- Category Filters -->
         <section class="filters-section" style="margin-bottom: 30px; position: relative;">
-            <div class="category-header-wrap">
-                <!-- Right-aligned Toggle Button -->
-                <div class="header-side">
+            <div class="catalog-header-container">
+                <h2 class="section-title catalog-main-title">الكتالوج</h2>
+
+                <div class="category-filters-row">
                     <button id="openCategoriesBtn" class="open-categories-btn" onclick="toggleCategoriesPanel()">
                         <i class="fa-solid fa-layer-group" style="color: var(--primary);"></i>
                         <span id="currentCategoryText">اختر القسم</span>
                         <i class="fa-solid fa-chevron-down down-icon"></i>
                     </button>
-                </div>
 
-                <!-- Centered Title -->
-                <h2 class="section-title header-center">الكتالوج</h2>
-
-                <!-- Left-aligned Sort Dropdown -->
-                <div class="header-side sort-side">
                     <select id="sortSelect" class="sort-select">
                         <option value="default">الترتيب الافتراضي</option>
-                        <option value="price-asc">السعر: من الأقل للأعلى</option>
-                        <option value="price-desc">السعر: من الأعلى للأقل</option>
+                        <option value="price-asc">السعر: الأقل للأعلى</option>
+                        <option value="price-desc">السعر: الأعلى للأقل</option>
                     </select>
                 </div>
             </div>
