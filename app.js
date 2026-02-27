@@ -178,12 +178,12 @@ function renderItems(itemsToRender, append = false) {
         const animDelay = (index % 10) * 0.1;
 
         html += `
-            <div class="item-card slide-up" style="animation-delay: ${animDelay}s">
-                <div class="card-img-container" onclick="openProductModal('${item.id}')">
+            <div class="item-card slide-up" style="animation-delay: ${animDelay}s; cursor: pointer;" onclick="openProductModal('${item.id}')">
+                <div class="card-img-container">
                     <img src="${imgUrl}" alt="${item.name}" class="card-img" onerror="this.src='${FALLBACK_IMG}'">
                 </div>
                 <div class="card-body">
-                    <a href="#" class="card-category" onclick="filterByCategory(event, '${item.category_id}')" title="عرض كل السلع في ${item.category_name}">${item.category_name}</a>
+                    <a href="#" class="card-category" onclick="event.stopPropagation(); filterByCategory(event, '${item.category_id}')" title="عرض كل السلع في ${item.category_name}">${item.category_name}</a>
                     <h3 class="card-title">${item.name}</h3>
                     <div class="card-stock">
                         ${stockStatus}
@@ -192,7 +192,7 @@ function renderItems(itemsToRender, append = false) {
                         <div class="price">
                             ${parseFloat(item.sale_price).toFixed(2)} <span>ج.م</span>
                         </div>
-                        <button class="add-btn" title="أضف للسلة" onclick="addToCart('${item.id}', \`${item.name}\`, ${item.sale_price}, '${imgUrl}')">
+                        <button class="add-btn" title="أضف للسلة" onclick="event.stopPropagation(); addToCart('${item.id}', \`${item.name}\`, ${item.sale_price}, '${imgUrl}')">
                             <i class="fa-solid fa-cart-plus"></i>
                         </button>
                     </div>

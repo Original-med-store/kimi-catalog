@@ -1710,10 +1710,23 @@ footer {
 /* ========================================================================= */
 .product-modal-content {
     max-width: 900px;
+    width: 95%;
+    /* Better width on smaller desktops */
+    max-height: 92vh;
+    /* Override default 80vh */
     padding: 0;
-    overflow: hidden;
+    overflow-y: auto;
+    /* Allow scrolling content */
+    overflow-x: hidden;
+    scrollbar-width: none;
+    /* Firefox */
     border-radius: 15px;
     position: relative;
+}
+
+.product-modal-content::-webkit-scrollbar {
+    display: none;
+    /* Chrome */
 }
 
 #productDetailsModal .close-modal {
@@ -1878,5 +1891,44 @@ footer {
     #productDetailsModal .close-modal {
         top: 10px;
         left: 10px;
+    }
+}
+
+/* ========================================================================= */
+/* Toast Notification */
+/* ========================================================================= */
+.toast {
+    position: fixed;
+    bottom: 80px;
+    /* Above the mobile nav bar */
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: rgba(30, 41, 59, 0.95);
+    color: white;
+    padding: 12px 25px;
+    border-radius: 30px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    z-index: 5000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+}
+
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Ensure toast on desktop is also visible and well positioned */
+@media (min-width: 769px) {
+    .toast {
+        bottom: 40px;
     }
 }
