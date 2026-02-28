@@ -96,10 +96,16 @@ async function fetchItems() {
 
         if (error) throw error;
         // Transform data slightly to include category name easily
-        allItems = (data || []).map(item => ({
-            ...item,
-            category_name: item.categories ? item.categories.name : 'بدون تصنيف'
-        }));
+        allItems = (data || []).map(item => {
+            let catName = item.categories ? item.categories.name : 'منتجات متنوعة';
+            if (!catName || String(catName).toLowerCase().trim() === 'nan') {
+                catName = 'منتجات متنوعة';
+            }
+            return {
+                ...item,
+                category_name: catName
+            };
+        });
     } catch (err) {
         console.error('Error fetching items:', err.message);
         throw new Error('فشل جلب الأصناف: ' + err.message);
@@ -113,10 +119,20 @@ function renderCategories() {
                     <span>الرئيسية (الكل)</span>
                 </button>`;
 
+    // Create a Set of category IDs that actually have at least one item
+    const activeCategoryIds = new Set(allItems.map(item => item.category_id));
+
     allCategories.forEach(cat => {
-        html += `<button class="filter-btn" data-id="${cat.id}">
-                    <span>${cat.name}</span>
-                 </button>`;
+        // Only render category if it has items
+        if (activeCategoryIds.has(cat.id)) {
+            let displayName = cat.name;
+            if (!displayName || String(displayName).toLowerCase().trim() === 'nan') {
+                displayName = 'منتجات متنوعة';
+            }
+            html += `<button class="filter-btn" data-id="${cat.id}">
+                        <span>${displayName}</span>
+                     </button>`;
+        }
     });
 
     const categoriesContainer = document.getElementById('categoriesContainer');
