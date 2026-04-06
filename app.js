@@ -185,13 +185,16 @@ function renderItems(itemsToRender, append = false) {
                     <div class="card-stock">
                         ${stockStatus}
                     </div>
-                    <div class="card-footer">
-                        <div class="price">
+                    <div class="card-footer" style="flex-wrap: wrap; gap: 8px;">
+                        <div class="price" style="width: 100%;">
                             ${parseFloat(item.sale_price).toFixed(2)} <span>ج.م</span>
                         </div>
-                        <button class="add-btn" title="أضف للسلة" onclick="event.stopPropagation(); addToCart('${item.id}', \`${item.name}\`, ${item.sale_price}, '${imgUrl}')">
-                            <i class="fa-solid fa-cart-plus"></i>
-                        </button>
+                        <div style="display: flex; gap: 5px; width: 100%;">
+                            <input type="number" id="qtyInput_${item.id}" value="1" min="1" step="1" onclick="event.stopPropagation();" style="width: 60px; text-align: center; border: 1px solid #ddd; border-radius: 6px; padding: 4px; font-weight: 600; font-family: inherit;">
+                            <button class="add-btn" style="flex: 1; border-radius: 6px; display: flex; justify-content: center; align-items: center; gap: 5px;" title="أضف للسلة" onclick="event.stopPropagation(); const qInput = document.getElementById('qtyInput_${item.id}'); addToCart('${item.id}', \`${item.name}\`, ${item.sale_price}, '${imgUrl}', parseInt(qInput.value) || 1); qInput.value = '1';">
+                                <i class="fa-solid fa-cart-plus"></i> إضافة
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>`;
@@ -525,7 +528,15 @@ function openProductModal(itemId) {
     addToCartBtn.parentNode.replaceChild(newAddToCartBtn, addToCartBtn);
 
     newAddToCartBtn.onclick = function () {
-        addToCart(item.id, item.name, item.sale_price, imgUrl);
+        const qtyInput = document.getElementById('modalQtyInput');
+        let qty = 1;
+        if (qtyInput) {
+            qty = parseInt(qtyInput.value) || 1;
+            if (qty < 1) qty = 1;
+        }
+        addToCart(item.id, item.name, item.sale_price, imgUrl, qty);
+        if (qtyInput) qtyInput.value = "1"; // reset
+        closeProductModal(); // optional but nice for UX
     };
 
     const whatsappBtn = document.getElementById('modalWhatsappBtn');
@@ -727,12 +738,12 @@ function toggleCart() {
     }
 }
 
-function addToCart(id, name, price, imgUrl) {
+function addToCart(id, name, price, imgUrl, qtyToAdd = 1) {
     const existingItem = cart.find(i => i.id === id);
     if (existingItem) {
-        existingItem.qty += 1;
+        existingItem.qty += qtyToAdd;
     } else {
-        cart.push({ id, name, price, imgUrl, qty: 1 });
+        cart.push({ id, name, price, imgUrl, qty: qtyToAdd });
     }
     updateCart();
 
@@ -758,6 +769,22 @@ function updateQuantity(id, delta) {
         cart[itemIndex].qty += delta;
         if (cart[itemIndex].qty <= 0) {
             cart.splice(itemIndex, 1);
+        }
+        updateCart();
+    }
+}
+
+function setExactQuantity(id, value) {
+    let newQty = parseInt(value);
+    if (isNaN(newQty) || newQty <= 0) {
+        newQty = 0; // will be deleted
+    }
+    const itemIndex = cart.findIndex(i => String(i.id) === String(id));
+    if (itemIndex > -1) {
+        if (newQty <= 0) {
+            cart.splice(itemIndex, 1);
+        } else {
+            cart[itemIndex].qty = newQty;
         }
         updateCart();
     }
@@ -829,7 +856,7 @@ function updateCart() {
                 </div>
                 <div class="cart-item-qty">
                     <button class="qty-btn" onclick="updateQuantity('${item.id}', 1)">+</button>
-                    <span>${item.qty}</span>
+                    <input type="number" class="qty-input" value="${item.qty}" min="1" step="1" onchange="setExactQuantity('${item.id}', this.value)" style="width: 50px; text-align: center; border: 1px solid #ddd; border-radius: 6px; padding: 4px; font-weight: 600; font-family: inherit; -moz-appearance: textfield;">
                     <button class="qty-btn" onclick="updateQuantity('${item.id}', -1)">-</button>
                 </div>
                 <button class="remove-btn" onclick="removeCartItem('${item.id}')" title="حذف الصنف"><i class="fa-solid fa-trash-can"></i></button>

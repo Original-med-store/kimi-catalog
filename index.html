@@ -385,12 +385,20 @@
                         </p>
                     </div>
 
-                    <div class="modal-actions">
-                        <button id="modalAddToCartBtn" class="primary-btn checkout-btn">
+                    <div class="modal-actions" style="display: flex; flex-direction: column; gap: 10px;">
+                        <div
+                            style="display: flex; gap: 10px; align-items: center; width: 100%; background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                            <label for="modalQtyInput"
+                                style="font-weight: 600; color: var(--dark); white-space: nowrap; margin: 0;">الكمية
+                                المطلوبة:</label>
+                            <input type="number" id="modalQtyInput" value="1" min="1" step="1"
+                                style="flex: 1; padding: 8px; border: 2px solid #e2e8f0; border-radius: 6px; text-align: center; font-size: 1.1rem; font-weight: bold; color: var(--primary); background: #fff;">
+                        </div>
+                        <button id="modalAddToCartBtn" class="primary-btn checkout-btn" style="width: 100%;">
                             <i class="fa-solid fa-cart-plus"></i> إضافة للسلة
                         </button>
                         <button id="modalWhatsappBtn" class="whatsapp-btn checkout-btn"
-                            style="background:#25d366; color:#fff;">
+                            style="background:#25d366; color:#fff; width: 100%;">
                             <i class="fa-brands fa-whatsapp"></i> استفسار / طلب عبر واتساب
                         </button>
                     </div>
