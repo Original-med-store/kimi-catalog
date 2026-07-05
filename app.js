@@ -86,17 +86,38 @@ async function fetchCategories() {
 
 async function fetchItems() {
     try {
-        const { data, error } = await supabaseClient
-            .from('items')
-            .select(`
-                *,
-                categories ( name )
-            `)
-            .order('name', { ascending: true });
+        let allData = [];
+        let from = 0;
+        let to = 999;
+        let hasMore = true;
 
-        if (error) throw error;
+        while (hasMore) {
+            const { data, error } = await supabaseClient
+                .from('items')
+                .select(`
+                    *,
+                    categories ( name )
+                `)
+                .order('name', { ascending: true })
+                .range(from, to);
+
+            if (error) throw error;
+
+            if (data && data.length > 0) {
+                allData = allData.concat(data);
+                if (data.length < 1000) {
+                    hasMore = false;
+                } else {
+                    from += 1000;
+                    to += 1000;
+                }
+            } else {
+                hasMore = false;
+            }
+        }
+
         // Transform data slightly to include category name easily
-        allItems = (data || []).map(item => {
+        allItems = allData.map(item => {
             let catName = item.categories ? item.categories.name : 'منتجات متنوعة';
             if (!catName || String(catName).toLowerCase().trim() === 'nan') {
                 catName = 'منتجات متنوعة';
