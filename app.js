@@ -969,7 +969,7 @@ checkoutForm.addEventListener('submit', function (e) {
     let total = 0;
     let orderDetails = cart.map(item => {
         total += (item.price * item.qty);
-        return `▫️ ${item.qty}x ${item.name} (${(item.price * item.qty).toFixed(2)} ج.م)`;
+        return `▫️ ${item.qty} * ${item.name} (${(item.price * item.qty).toFixed(2)} ج.م)`;
     }).join('\n');
 
     const message = `
