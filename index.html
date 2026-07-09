@@ -41,6 +41,13 @@
 
 <body>
 
+    <!-- Top Announcement Promo Bar -->
+    <div class="promo-bar">
+        <div class="promo-content">
+            <span>✨ نوفر جميع الأجهزة والمستلزمات الطبية حسب الطلب | تواصل معنا مباشرة ✨</span>
+        </div>
+    </div>
+
     <!-- Header & Hero Section -->
     <header class="hero-section">
         <div class="glass-nav">
@@ -364,8 +371,9 @@
             <span class="close-modal" onclick="closeProductModal()">&times;</span>
             <div class="product-details-grid">
                 <!-- Right Side: Image -->
-                <div class="product-modal-image">
-                    <img id="modalProductImg" src="" alt="صورة المنتج">
+                <div class="product-modal-image loading">
+                    <div class="shimmer-loader"></div>
+                    <img id="modalProductImg" src="" alt="صورة المنتج" onload="this.parentElement.classList.remove('loading');" onerror="this.src='https://via.placeholder.com/300x250?text=لا+توجد+صورة'; this.parentElement.classList.remove('loading');">
                     <span id="modalProductStock" class="stock-badge">متوفر</span>
                 </div>
                 <!-- Left Side: Details -->
@@ -387,12 +395,13 @@
 
                     <div class="modal-actions" style="display: flex; flex-direction: column; gap: 10px;">
                         <div
-                            style="display: flex; gap: 10px; align-items: center; width: 100%; background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0;">
-                            <label for="modalQtyInput"
-                                style="font-weight: 600; color: var(--dark); white-space: nowrap; margin: 0;">الكمية
-                                المطلوبة:</label>
-                            <input type="number" id="modalQtyInput" value="1" min="1" step="1"
-                                style="flex: 1; padding: 8px; border: 2px solid #e2e8f0; border-radius: 6px; text-align: center; font-size: 1.1rem; font-weight: bold; color: var(--primary); background: #fff;">
+                            style="display: flex; gap: 10px; align-items: center; width: 100%; background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0; justify-content: space-between;">
+                            <label style="font-weight: 600; color: var(--dark); white-space: nowrap; margin: 0;">الكمية المطلوبة:</label>
+                            <div class="modal-qty-selector">
+                                <button class="modal-qty-btn minus" onclick="decrementModalQty()">-</button>
+                                <input type="number" class="modal-qty-val" id="modalQtyVal" value="1" min="1" step="1" onchange="validateQtyInput(this)">
+                                <button class="modal-qty-btn plus" onclick="incrementModalQty()">+</button>
+                            </div>
                         </div>
                         <button id="modalAddToCartBtn" class="primary-btn checkout-btn" style="width: 100%;">
                             <i class="fa-solid fa-cart-plus"></i> إضافة للسلة

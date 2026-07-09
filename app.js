@@ -197,8 +197,9 @@ function renderItems(itemsToRender, append = false) {
 
         html += `
             <div class="item-card slide-up" style="animation-delay: ${animDelay}s; cursor: pointer;" onclick="openProductModal('${item.id}')">
-                <div class="card-img-container">
-                    <img src="${imgUrl}" alt="${item.name}" class="card-img" onerror="this.src='${FALLBACK_IMG}'">
+                <div class="card-img-container loading">
+                    <div class="shimmer-loader"></div>
+                    <img src="${imgUrl}" alt="${item.name}" class="card-img" onload="this.parentElement.classList.remove('loading');" onerror="this.src='${FALLBACK_IMG}'; this.parentElement.classList.remove('loading');">
                 </div>
                 <div class="card-body">
                     <a href="#" class="card-category" onclick="event.stopPropagation(); filterByCategory(event, '${item.category_id}')" title="عرض كل السلع في ${item.category_name}">${item.category_name}</a>
@@ -210,9 +211,13 @@ function renderItems(itemsToRender, append = false) {
                         <div class="price" style="width: 100%;">
                             ${parseFloat(item.sale_price).toFixed(2)} <span>ج.م</span>
                         </div>
-                        <div style="display: flex; gap: 5px; width: 100%;">
-                            <input type="number" id="qtyInput_${item.id}" value="1" min="1" step="1" onclick="event.stopPropagation();" style="width: 60px; text-align: center; border: 1px solid #ddd; border-radius: 6px; padding: 4px; font-weight: 600; font-family: inherit;">
-                            <button class="add-btn" style="flex: 1; border-radius: 6px; display: flex; justify-content: center; align-items: center; gap: 5px;" title="أضف للسلة" onclick="event.stopPropagation(); const qInput = document.getElementById('qtyInput_${item.id}'); addToCart('${item.id}', \`${item.name}\`, ${item.sale_price}, '${imgUrl}', parseInt(qInput.value) || 1); qInput.value = '1';">
+                        <div style="display: flex; gap: 5px; width: 100%; align-items: center;">
+                            <div class="card-qty-selector" onclick="event.stopPropagation();">
+                                <button class="card-qty-btn minus" onclick="decrementQty('${item.id}')">-</button>
+                                <input type="number" class="card-qty-val" id="cardQtyVal_${item.id}" value="1" min="1" step="1" onchange="validateQtyInput(this)">
+                                <button class="card-qty-btn plus" onclick="incrementQty('${item.id}')">+</button>
+                            </div>
+                            <button class="add-btn" style="flex: 1; border-radius: 6px; display: flex; justify-content: center; align-items: center; gap: 5px;" title="أضف للسلة" onclick="event.stopPropagation(); const qVal = document.getElementById('cardQtyVal_${item.id}'); addToCart('${item.id}', \`${item.name}\`, ${item.sale_price}, '${imgUrl}', parseInt(qVal.value) || 1); qVal.value = '1';">
                                 <i class="fa-solid fa-cart-plus"></i> إضافة
                             </button>
                         </div>
@@ -511,6 +516,12 @@ function openProductModal(itemId) {
     const modal = document.getElementById('productDetailsModal');
     if (!modal) return;
 
+    // Reset image loading shimmer
+    const modalImageContainer = document.querySelector('.product-modal-image');
+    if (modalImageContainer) {
+        modalImageContainer.classList.add('loading');
+    }
+
     // Populate Data
     const imgUrl = item.image_url ? item.image_url : FALLBACK_IMG;
     document.getElementById('modalProductImg').src = imgUrl;
@@ -518,20 +529,24 @@ function openProductModal(itemId) {
     // Fallback on error
     document.getElementById('modalProductImg').onerror = function () {
         this.src = FALLBACK_IMG;
+        if (modalImageContainer) {
+            modalImageContainer.classList.remove('loading');
+        }
     };
 
     document.getElementById('modalProductCategory').textContent = item.category_name || 'بدون قسم';
     document.getElementById('modalProductName').textContent = item.name;
     document.getElementById('modalProductPrice').textContent = parseFloat(item.sale_price).toFixed(2);
 
-    // Stock Badge
+    // Stock Badge (Always show "متوفر" per client's request for on-demand ordering)
     const stockBadge = document.getElementById('modalProductStock');
-    if (item.stock > 0 || item.stock === null || item.stock === undefined) {
-        stockBadge.textContent = 'متوفر';
-        stockBadge.style.background = '#2ecc71';
-    } else {
-        stockBadge.textContent = 'غير متوفر';
-        stockBadge.style.background = '#e74c3c';
+    stockBadge.textContent = 'متوفر';
+    stockBadge.style.background = '#2ecc71';
+
+    // Reset Modal Quantity
+    const qtyVal = document.getElementById('modalQtyVal');
+    if (qtyVal) {
+        qtyVal.textContent = '1';
     }
 
     // Description
@@ -549,14 +564,14 @@ function openProductModal(itemId) {
     addToCartBtn.parentNode.replaceChild(newAddToCartBtn, addToCartBtn);
 
     newAddToCartBtn.onclick = function () {
-        const qtyInput = document.getElementById('modalQtyInput');
+        const qtyVal = document.getElementById('modalQtyVal');
         let qty = 1;
-        if (qtyInput) {
-            qty = parseInt(qtyInput.value) || 1;
+        if (qtyVal) {
+            qty = parseInt(qtyVal.textContent) || 1;
             if (qty < 1) qty = 1;
         }
         addToCart(item.id, item.name, item.sale_price, imgUrl, qty);
-        if (qtyInput) qtyInput.value = "1"; // reset
+        if (qtyVal) qtyVal.textContent = "1"; // reset
         closeProductModal(); // optional but nice for UX
     };
 
@@ -565,7 +580,10 @@ function openProductModal(itemId) {
     whatsappBtn.parentNode.replaceChild(newWhatsappBtn, whatsappBtn);
 
     newWhatsappBtn.onclick = function () {
-        const message = `مرحباً، أود الاستفسار عن المنتج:\n*${item.name}*\nالسعر: ${parseFloat(item.sale_price).toFixed(2)} ج.م\nالقسم: ${item.category_name}\nالكود: ${item.id}`;
+        const qtyVal = document.getElementById('modalQtyVal');
+        const qty = qtyVal ? (parseInt(qtyVal.textContent) || 1) : 1;
+        const totalCost = (parseFloat(item.sale_price) * qty).toFixed(2);
+        const message = `مرحباً، أود الاستفسار عن المنتج:\n*${item.name}*\nالكمية المطلوبة: ${qty}\nالسعر الإجمالي: ${totalCost} ج.م\nالقسم: ${item.category_name}\nالكود: ${item.id}`;
         const whatsappNumber = '201501882143'; // Default contact number
         const encodedMessage = encodeURIComponent(message);
         window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
@@ -856,7 +874,16 @@ function updateCart() {
 
     // Render Items
     if (cart.length === 0) {
-        cartItemsContainer.innerHTML = '<div style="text-align:center; padding: 20px; color:#999;">السلة فارغة حالياً</div>';
+        cartItemsContainer.innerHTML = `
+            <div class="empty-cart-container">
+                <div class="empty-cart-icon">
+                    <i class="fa-solid fa-basket-shopping"></i>
+                </div>
+                <h3>سلة المشتريات فارغة</h3>
+                <p>لم تقم بإضافة أي مستلزمات طبية بعد.</p>
+                <button class="shop-now-btn" onclick="toggleCart(); window.location.hash = '#catalog';">ابدأ التسوق الآن</button>
+            </div>
+        `;
         cartTotal.textContent = '0.00 ج.م';
         localStorage.setItem('kimiCart', JSON.stringify(cart));
         return;
@@ -1090,4 +1117,62 @@ function renderRelatedProducts(currentItem) {
             <div class="related-product-price">${parseFloat(item.sale_price).toFixed(2)} ج.م</div>
         </div>
     `).join('');
+}
+
+// ==========================================
+// Quantity Selector & Quick WhatsApp Order Logic
+// ==========================================
+function incrementQty(itemId) {
+    const el = document.getElementById(`cardQtyVal_${itemId}`);
+    if (el) {
+        let val = parseInt(el.value) || 1;
+        el.value = val + 1;
+    }
+}
+
+// Ensure the minus button doesn't go below 1
+function decrementQty(itemId) {
+    const el = document.getElementById(`cardQtyVal_${itemId}`);
+    if (el) {
+        let val = parseInt(el.value) || 1;
+        if (val > 1) {
+            el.value = val - 1;
+        }
+    }
+}
+
+function incrementModalQty() {
+    const el = document.getElementById('modalQtyVal');
+    if (el) {
+        let val = parseInt(el.value) || 1;
+        el.value = val + 1;
+    }
+}
+
+function decrementModalQty() {
+    const el = document.getElementById('modalQtyVal');
+    if (el) {
+        let val = parseInt(el.value) || 1;
+        if (val > 1) {
+            el.value = val - 1;
+        }
+    }
+}
+
+function validateQtyInput(el) {
+    let val = parseInt(el.value);
+    if (isNaN(val) || val < 1) {
+        el.value = 1;
+    }
+}
+
+function quickOrderWhatsapp(itemId) {
+    const item = allItems.find(i => String(i.id) === String(itemId));
+    if (!item) return;
+    const qtyVal = document.getElementById(`cardQtyVal_${itemId}`);
+    const qty = qtyVal ? (parseInt(qtyVal.textContent) || 1) : 1;
+    const message = `مرحباً، أود طلب المنتج التالي:\n*${item.name}*\nالكمية: ${qty}\nالسعر الإجمالي: ${(parseFloat(item.sale_price) * qty).toFixed(2)} ج.م\nالقسم: ${item.category_name}\nالكود: ${item.id}`;
+    const whatsappNumber = '201501882143';
+    const encodedMessage = encodeURIComponent(message);
+    window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
 }

@@ -12,6 +12,36 @@
     --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
+/* Announcement Promo Bar */
+.promo-bar {
+    background: linear-gradient(135deg, #ff9900, #ffb84d);
+    color: white;
+    text-align: center;
+    padding: 8px 15px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    z-index: 2001;
+    position: relative;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+    direction: rtl;
+}
+
+.promo-content span {
+    display: inline-block;
+    animation: promoPulse 3s ease-in-out infinite;
+}
+
+@keyframes promoPulse {
+    0%, 100% {
+        opacity: 0.9;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.015);
+    }
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -63,7 +93,7 @@ button {
 /* ---------------- Hero Section (Glassmorphism) ---------------- */
 .hero-section {
     position: relative;
-    min-height: 70vh;
+    min-height: 52vh;
     background: linear-gradient(135deg, var(--darker), var(--dark));
     color: white;
     overflow: hidden;
@@ -146,20 +176,20 @@ button {
     align-items: center;
     text-align: center;
     z-index: 10;
-    padding: 20px;
+    padding: 15px;
     max-width: 800px;
 }
 
 .hero-content h1 {
-    font-size: 4rem;
+    font-size: 3.2rem;
     line-height: 1.2;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
 }
 
 .hero-content p {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     color: #cbd5e1;
-    margin-bottom: 40px;
+    margin-bottom: 25px;
 }
 
 /* Search Box */
@@ -253,8 +283,8 @@ button {
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 35px;
+    gap: 12px;
+    margin-top: 20px;
     width: 100%;
 }
 
@@ -801,10 +831,17 @@ main {
     transition: var(--transition);
 }
 
+.add-btn i {
+    transition: transform 0.3s ease;
+}
+
 .item-card:hover .add-btn {
     background: linear-gradient(to right, var(--primary), var(--secondary));
     color: white;
-    transform: rotate(90deg);
+}
+
+.item-card:hover .add-btn i {
+    transform: scale(1.2);
 }
 
 /* Loading Spinner */
@@ -1392,12 +1429,22 @@ footer {
 .auth-modal-content {
     max-width: 400px;
     padding: 30px;
+    position: relative;
+}
+
+#authModal .close-modal {
+    top: 12px;
+    right: 20px;
+    font-size: 30px;
+    line-height: 1;
+    z-index: 10;
 }
 
 .auth-tabs {
     display: flex;
     border-bottom: 2px solid #eee;
     margin-bottom: 25px;
+    margin-top: 25px;
 }
 
 .auth-tab {
@@ -1903,6 +1950,7 @@ footer {
     position: absolute;
     top: 15px;
     left: 15px;
+    right: auto; /* Override general .close-modal right position */
     /* RTL layout */
     z-index: 10;
     background: white;
@@ -2061,6 +2109,7 @@ footer {
     #productDetailsModal .close-modal {
         top: 10px;
         left: 10px;
+        right: auto; /* Override general .close-modal right position */
     }
 }
 
@@ -2273,4 +2322,230 @@ footer {
     font-size: 0.95rem;
     font-weight: bold;
     color: var(--primary);
+}
+
+/* ========================================================================= */
+/* Quantity Selector (Cards and Modal) */
+/* ========================================================================= */
+.card-qty-selector {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f1f2f6;
+    border-radius: 6px;
+    padding: 3px;
+    width: 70px;
+    height: 35px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.card-qty-btn {
+    background: none;
+    border: none;
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: var(--text);
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+    user-select: none;
+}
+
+.card-qty-btn:hover {
+    color: var(--primary);
+}
+
+.card-qty-val {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--dark);
+    width: 25px;
+    text-align: center;
+    border: none;
+    background: transparent;
+    outline: none;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.card-qty-val::-webkit-outer-spin-button,
+.card-qty-val::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.modal-qty-selector {
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 25px;
+    padding: 3px 10px;
+    gap: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+}
+
+.modal-qty-btn {
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: var(--text);
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.modal-qty-btn:hover {
+    color: var(--primary);
+    transform: scale(1.15);
+}
+
+.modal-qty-val {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--primary);
+    width: 35px;
+    text-align: center;
+    border: none;
+    background: transparent;
+    outline: none;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.modal-qty-val::-webkit-outer-spin-button,
+.modal-qty-val::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* ========================================================================= */
+/* Quick WhatsApp Order Button */
+/* ========================================================================= */
+.quick-whatsapp-btn {
+    background: #25D366;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2);
+}
+
+.quick-whatsapp-btn:hover {
+    background: #1ebd5a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(37, 211, 102, 0.35);
+}
+
+/* ========================================================================= */
+/* Empty Cart Styling */
+/* ========================================================================= */
+.empty-cart-container {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.empty-cart-icon {
+    font-size: 4rem;
+    background: linear-gradient(135deg, rgba(0, 210, 255, 0.1) 0%, rgba(58, 123, 213, 0.1) 100%);
+    color: var(--secondary);
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.02);
+}
+
+.empty-cart-container h3 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--darker);
+    margin-bottom: 8px;
+}
+
+.empty-cart-container p {
+    font-size: 0.95rem;
+    color: #7f8c8d;
+    margin-bottom: 25px;
+}
+
+.shop-now-btn {
+    background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 210, 255, 0.25);
+    transition: var(--transition);
+}
+
+.shop-now-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 210, 255, 0.35);
+}
+
+/* ========================================================================= */
+/* Shimmer Image Loading & Fade-in */
+/* ========================================================================= */
+.card-img-container.loading,
+.product-modal-image.loading {
+    background: #f1f2f6;
+    position: relative;
+}
+
+.shimmer-loader {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #f1f2f6 25%, #e2e8f0 50%, #f1f2f6 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+.loading .shimmer-loader {
+    display: block;
+    z-index: 5;
+}
+
+.card-img, #modalProductImg {
+    transition: opacity 0.4s ease;
+    opacity: 1;
+}
+
+.loading .card-img, .loading #modalProductImg {
+    opacity: 0;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
 }
