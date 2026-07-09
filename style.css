@@ -1598,6 +1598,9 @@ footer {
 
 /* Responsive */
 @media (max-width: 768px) {
+    .promo-bar {
+        display: none;
+    }
 
     /* Revert header stickiness, only search is fixed */
     header {
