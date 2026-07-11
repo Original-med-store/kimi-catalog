@@ -1928,6 +1928,7 @@ footer {
 /* Product Details Modal (Quick View) */
 /* ========================================================================= */
 .product-modal-content {
+    background: white;
     max-width: 950px;
     /* slightly wider to fit side-by-side better */
     width: 95%;
