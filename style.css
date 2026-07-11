@@ -1875,9 +1875,11 @@ footer {
     }
 
     .card-title {
-        font-size: 0.9rem;
-        /* خط أصغر لاسم الدواء */
-        margin-bottom: 5px;
+        font-size: 0.95rem;
+        font-weight: 700; /* More readable than 800 for small Arabic text */
+        line-height: 1.4;
+        margin-bottom: 6px;
+        color: #1a1a2e;
     }
 
     .card-category {
