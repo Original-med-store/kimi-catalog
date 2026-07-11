@@ -393,20 +393,21 @@
                         </p>
                     </div>
 
-                    <div class="modal-actions-container">
-                        <div class="modal-actions-top-row">
-                            <div class="modal-qty-row">
-                                <div class="modal-qty-selector">
-                                    <button class="modal-qty-btn minus" onclick="decrementModalQty()">-</button>
-                                    <input type="number" class="modal-qty-val" id="modalQtyVal" value="1" min="1" step="1" onchange="validateQtyInput(this)">
-                                    <button class="modal-qty-btn plus" onclick="incrementModalQty()">+</button>
-                                </div>
+                    <div class="modal-actions" style="display: flex; flex-direction: column; gap: 10px;">
+                        <div
+                            style="display: flex; gap: 10px; align-items: center; width: 100%; background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0; justify-content: space-between;">
+                            <label style="font-weight: 600; color: var(--dark); white-space: nowrap; margin: 0;">الكمية المطلوبة:</label>
+                            <div class="modal-qty-selector">
+                                <button class="modal-qty-btn minus" onclick="decrementModalQty()">-</button>
+                                <input type="number" class="modal-qty-val" id="modalQtyVal" value="1" min="1" step="1" onchange="validateQtyInput(this)">
+                                <button class="modal-qty-btn plus" onclick="incrementModalQty()">+</button>
                             </div>
-                            <button id="modalAddToCartBtn" class="primary-btn modal-action-btn add-to-cart-btn">
-                                <i class="fa-solid fa-cart-plus"></i> إضافة للسلة
-                            </button>
                         </div>
-                        <button id="modalWhatsappBtn" class="whatsapp-btn modal-action-btn whatsapp-action-btn">
+                        <button id="modalAddToCartBtn" class="primary-btn checkout-btn" style="width: 100%;">
+                            <i class="fa-solid fa-cart-plus"></i> إضافة للسلة
+                        </button>
+                        <button id="modalWhatsappBtn" class="whatsapp-btn checkout-btn"
+                            style="background:#25d366; color:#fff; width: 100%;">
                             <i class="fa-brands fa-whatsapp"></i> استفسار / طلب عبر واتساب
                         </button>
                     </div>
