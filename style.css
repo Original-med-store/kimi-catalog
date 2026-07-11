@@ -2077,45 +2077,144 @@ footer {
     /* For line breaks if any */
 }
 
-.modal-actions {
+.modal-actions-container {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
     margin-top: auto;
 }
 
-/* Responsive adjustments for the modal */
+.modal-actions-top-row {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.modal-qty-row {
+    display: flex;
+    align-items: center;
+    background: #f8fafc;
+    padding: 6px 12px;
+    border-radius: 25px;
+    border: 1px solid #e2e8f0;
+    justify-content: center;
+    height: 44px;
+}
+
+.modal-action-btn {
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    border: none;
+    outline: none;
+    font-family: 'Cairo', sans-serif;
+}
+
+.add-to-cart-btn {
+    flex: 1;
+    height: 44px;
+}
+
+.whatsapp-action-btn {
+    background: #25d366 !important;
+    color: white !important;
+    width: 100%;
+    height: 44px;
+    box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2);
+}
+
+.whatsapp-action-btn:hover {
+    background: #20ba5a !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(37, 211, 102, 0.3);
+}
+
 @media (max-width: 768px) {
     .product-details-grid {
         grid-template-columns: 1fr;
     }
 
     .product-modal-image {
-        padding: 20px;
-        min-height: 200px;
+        padding: 10px;
+        min-height: 130px; /* Highly compact height on mobile */
     }
 
     .product-modal-image img {
-        max-height: 250px;
+        max-height: 130px; /* Reduced from 250px to fit on single page fold */
     }
 
     .product-modal-info {
-        padding: 20px;
+        padding: 12px 16px; /* Tighten margins */
+    }
+
+    .modal-category {
+        font-size: 0.8rem;
+        margin-bottom: 3px;
     }
 
     .modal-title {
-        font-size: 1.4rem;
-        margin-bottom: 15px;
+        font-size: 1.15rem; /* Compact title size on mobile */
+        margin-bottom: 8px;
     }
 
     .modal-price {
-        font-size: 2rem;
+        font-size: 1.6rem; /* Compact price size */
+    }
+
+    .modal-price-box {
+        margin-bottom: 8px;
+    }
+
+    .modal-desc-text {
+        font-size: 0.8rem; /* Extremely legible but smaller text size */
+        line-height: 1.4;
     }
 
     #productDetailsModal .close-modal {
         top: 10px;
         left: 10px;
         right: auto; /* Override general .close-modal right position */
+        width: 30px;
+        height: 30px;
+    }
+
+    .modal-action-btn {
+        font-size: 0.9rem; /* Smaller text size on buttons for mobile */
+        height: 38px;
+    }
+
+    .modal-qty-row {
+        height: 38px;
+        padding: 4px 8px;
+    }
+
+    .add-to-cart-btn {
+        height: 38px;
+    }
+
+    .whatsapp-action-btn {
+        height: 38px;
+    }
+
+    .modal-qty-selector {
+        gap: 8px;
+    }
+
+    .modal-qty-btn {
+        font-size: 1.1rem;
+        width: 24px;
+        height: 24px;
+    }
+
+    .modal-qty-val {
+        font-size: 1rem;
+        width: 25px;
     }
 }
 
