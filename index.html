@@ -373,7 +373,7 @@
                 <!-- Right Side: Image -->
                 <div class="product-modal-image loading">
                     <div class="shimmer-loader"></div>
-                    <img id="modalProductImg" src="" alt="صورة المنتج" onload="this.parentElement.classList.remove('loading');" onerror="this.src='https://via.placeholder.com/300x250?text=لا+توجد+صورة'; this.parentElement.classList.remove('loading');">
+                    <img id="modalProductImg" src="" alt="صورة المنتج" onclick="openLightbox(this.src, document.getElementById('modalProductName').textContent)" onload="this.parentElement.classList.remove('loading');" onerror="this.src='https://via.placeholder.com/300x250?text=لا+توجد+صورة'; this.parentElement.classList.remove('loading');">
                     <span id="modalProductStock" class="stock-badge">متوفر</span>
                 </div>
                 <!-- Left Side: Details -->
@@ -449,6 +449,7 @@
             <span>تواصل</span>
         </a>
     </nav>
+
 
     <!-- Footer -->
     <footer>

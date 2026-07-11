@@ -546,7 +546,7 @@ function openProductModal(itemId) {
     // Reset Modal Quantity
     const qtyVal = document.getElementById('modalQtyVal');
     if (qtyVal) {
-        qtyVal.textContent = '1';
+        qtyVal.value = '1';
     }
 
     // Description
@@ -567,11 +567,11 @@ function openProductModal(itemId) {
         const qtyVal = document.getElementById('modalQtyVal');
         let qty = 1;
         if (qtyVal) {
-            qty = parseInt(qtyVal.textContent) || 1;
+            qty = parseInt(qtyVal.value) || 1;
             if (qty < 1) qty = 1;
         }
         addToCart(item.id, item.name, item.sale_price, imgUrl, qty);
-        if (qtyVal) qtyVal.textContent = "1"; // reset
+        if (qtyVal) qtyVal.value = "1"; // reset
         closeProductModal(); // optional but nice for UX
     };
 
@@ -581,7 +581,7 @@ function openProductModal(itemId) {
 
     newWhatsappBtn.onclick = function () {
         const qtyVal = document.getElementById('modalQtyVal');
-        const qty = qtyVal ? (parseInt(qtyVal.textContent) || 1) : 1;
+        const qty = qtyVal ? (parseInt(qtyVal.value) || 1) : 1;
         const totalCost = (parseFloat(item.sale_price) * qty).toFixed(2);
         const message = `مرحباً، أود الاستفسار عن المنتج:\n*${item.name}*\nالكمية المطلوبة: ${qty}\nالسعر الإجمالي: ${totalCost} ج.م\nالقسم: ${item.category_name}\nالكود: ${item.id}`;
         const whatsappNumber = '201501882143'; // Default contact number
@@ -1170,7 +1170,7 @@ function quickOrderWhatsapp(itemId) {
     const item = allItems.find(i => String(i.id) === String(itemId));
     if (!item) return;
     const qtyVal = document.getElementById(`cardQtyVal_${itemId}`);
-    const qty = qtyVal ? (parseInt(qtyVal.textContent) || 1) : 1;
+    const qty = qtyVal ? (parseInt(qtyVal.value) || 1) : 1;
     const message = `مرحباً، أود طلب المنتج التالي:\n*${item.name}*\nالكمية: ${qty}\nالسعر الإجمالي: ${(parseFloat(item.sale_price) * qty).toFixed(2)} ج.م\nالقسم: ${item.category_name}\nالكود: ${item.id}`;
     const whatsappNumber = '201501882143';
     const encodedMessage = encodeURIComponent(message);
