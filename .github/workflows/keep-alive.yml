@@ -1,0 +1,27 @@
+﻿name: Supabase Keep-Alive Ping
+
+on:
+  schedule:
+    - cron: "0 10 */3 * *"
+  workflow_dispatch:
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase items
+        run: |
+          echo "Pinging Supabase at $(date)"
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
+            "https://qwijottxtonytfysnguk.supabase.co/rest/v1/items?limit=1" \
+            -H "apikey: sb_publishable_HjCj62IAOLkFnKcEggjHsQ_7jkbdjGo" \
+            -H "Authorization: Bearer sb_publishable_HjCj62IAOLkFnKcEggjHsQ_7jkbdjGo")
+          echo "Response: $RESPONSE"
+          if [ "$RESPONSE" = "200" ]; then echo "OK - Supabase alive"; else echo "WARN - code $RESPONSE"; fi
+
+      - name: Ping Supabase categories
+        run: |
+          curl -s "https://qwijottxtonytfysnguk.supabase.co/rest/v1/categories?limit=1" \
+            -H "apikey: sb_publishable_HjCj62IAOLkFnKcEggjHsQ_7jkbdjGo" \
+            -H "Authorization: Bearer sb_publishable_HjCj62IAOLkFnKcEggjHsQ_7jkbdjGo" > /dev/null
+          echo "Categories ping done"
