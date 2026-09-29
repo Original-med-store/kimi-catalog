@@ -53,16 +53,13 @@ const FALLBACK_IMG = 'https://via.placeholder.com/300x250?text=لا+توجد+ص�
 // Initialize the App
 async function init() {
     try {
-        if (!supabaseClient) {
-            showLoading(false);
-            itemsGrid.innerHTML = `<div style="color:red; text-align:center; padding: 20px;">خطأ: لم يتم تحميل مكتبة Supabase. تأكد من اتصالك بالإنترنت.</div>`;
-            return;
-        }
         showLoading(true);
         await fetchCategories();
         await fetchItems();
-        await checkUserSession();
-
+        // Auth: only if supabase is available
+        if (supabaseClient) {
+            try { await checkUserSession(); } catch(e) { console.warn('Auth skipped:', e.message); }
+        }
         showLoading(false);
         renderCategories();
         renderItems(allItems);
@@ -73,59 +70,30 @@ async function init() {
     }
 }
 
+// ── تحميل البيانات من data.json المحلي (لا يحتاج Supabase) ──────────────────
 async function fetchCategories() {
     try {
-        const { data, error } = await supabaseClient.from('categories').select('*').order('name');
-        if (error) throw error;
-        allCategories = data || [];
+        const res = await fetch('/data.json?v=' + Date.now());
+        if (!res.ok) throw new Error('data.json غير موجود (HTTP ' + res.status + ')');
+        const json = await res.json();
+        allCategories = (json.categories || []).sort((a,b) => a.name.localeCompare(b.name, 'ar'));
     } catch (err) {
-        console.error('Error fetching categories:', err.message);
-        throw new Error('فشل جلب التصنيفات: ' + err.message);
+        console.error('fetchCategories error:', err.message);
+        allCategories = [];
     }
 }
 
 async function fetchItems() {
     try {
-        let allData = [];
-        let from = 0;
-        let to = 999;
-        let hasMore = true;
-
-        while (hasMore) {
-            const { data, error } = await supabaseClient
-                .from('items')
-                .select(`
-                    *,
-                    categories ( name )
-                `)
-                .order('name', { ascending: true })
-                .range(from, to);
-
-            if (error) throw error;
-
-            if (data && data.length > 0) {
-                allData = allData.concat(data);
-                if (data.length < 1000) {
-                    hasMore = false;
-                } else {
-                    from += 1000;
-                    to += 1000;
-                }
-            } else {
-                hasMore = false;
-            }
-        }
-
-        // Transform data slightly to include category name easily
-        allItems = allData.map(item => {
-            let catName = item.categories ? item.categories.name : 'منتجات متنوعة';
+        const res = await fetch('/data.json?v=' + Date.now());
+        if (!res.ok) throw new Error('data.json غير موجود (HTTP ' + res.status + ')');
+        const json = await res.json();
+        allItems = (json.items || []).map(item => {
+            let catName = item.category_name || 'منتجات متنوعة';
             if (!catName || String(catName).toLowerCase().trim() === 'nan') {
                 catName = 'منتجات متنوعة';
             }
-            return {
-                ...item,
-                category_name: catName
-            };
+            return { ...item, category_name: catName };
         });
     } catch (err) {
         console.error('Error fetching items:', err.message);
