@@ -6,8 +6,8 @@ window.addEventListener("unhandledrejection", function (event) {
 });
 
 // Supabase Configuration
-const SUPABASE_URL = 'https://qwijottxtonytfysnguk.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_HjCj62IAOLkFnKcEggjHsQ_7jkbdjGo';
+const SUPABASE_URL = 'https://dopoemlgfbbporaidkwq.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_euLHPI6HKZmq6gBBgjjf5A_kISEWlgk';
 
 let supabaseClient;
 try {
